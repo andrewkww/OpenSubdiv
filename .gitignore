@@ -1,3 +1,13 @@
 
 # ignore stringified kernels
 *.inc
+
+# ignore cmake files
+/CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# ignore compiled files
+/bin/
+/lib/
