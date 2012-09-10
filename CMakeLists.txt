@@ -194,10 +194,6 @@ endif()
 set( OSD_LINK_TARGET osd_dynamic )
 
 if (WIN32)
-    add_definitions(
-        # Link against the static version of GLEW.
-        -DGLEW_STATIC
-    )
     # Link examples & regressions statically against Osd for
     # Windows until all the kinks can be worked out.
     set( OSD_LINK_TARGET osd_static )

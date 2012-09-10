@@ -87,6 +87,13 @@ if (WIN32)
             ${PROJECT_SOURCE_DIR}/extern/glew/bin
             ${PROJECT_SOURCE_DIR}/extern/glew/lib
             DOC "The GLEW library")
+
+    get_filename_component(GLEW_LIBRARY_NAME ${GLEW_LIBRARY} NAME_WE)
+    if(${GLEW_LIBRARY_NAME} MATCHES glew32s)
+        add_definitions(
+            -DGLEW_STATIC
+            )
+    endif()
 endif ()
 
 if (${CMAKE_HOST_UNIX})
