@@ -417,12 +417,16 @@ source_group("Kernels" FILES ${KERNEL_FILES})
 
 source_group("Inc" FILES ${INC_FILES})
 
+if(WIN32)
+    set(STATIC_LIBRARY_SUFFIX s)
+endif()
+
 _add_possibly_cuda_library(osd_static_cpu STATIC
     ${CPU_SOURCE_FILES}
     ${PRIVATE_HEADER_FILES}
     ${PUBLIC_HEADER_FILES}
 )
-set_target_properties(osd_static_cpu PROPERTIES OUTPUT_NAME osdCPU CLEAN_DIRECT_OUTPUT 1)
+set_target_properties(osd_static_cpu PROPERTIES OUTPUT_NAME osdCPU${STATIC_LIBRARY_SUFFIX} CLEAN_DIRECT_OUTPUT 1)
 
 target_link_libraries(osd_static_cpu
     ${PLATFORM_LIBRARIES}
@@ -435,7 +439,7 @@ _add_possibly_cuda_library(osd_static_gpu STATIC
     ${KERNEL_FILES}
     ${INC_FILES}
 )
-set_target_properties(osd_static_gpu PROPERTIES OUTPUT_NAME osdGPU CLEAN_DIRECT_OUTPUT 1)
+set_target_properties(osd_static_gpu PROPERTIES OUTPUT_NAME osdGPU${STATIC_LIBRARY_SUFFIX} CLEAN_DIRECT_OUTPUT 1)
 
 target_link_libraries(osd_static_gpu
     ${PLATFORM_LIBRARIES}
