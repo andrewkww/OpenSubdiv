@@ -235,6 +235,9 @@ _add_possibly_cuda_library(osd_static STATIC
     ${INC_FILES}
 )
 set_target_properties(osd_static PROPERTIES OUTPUT_NAME osd CLEAN_DIRECT_OUTPUT 1)
+if (WIN32)
+    set_target_properties(osd_static PROPERTIES PREFIX "lib")
+endif()
 
 target_link_libraries(osd_static
     ${PLATFORM_LIBRARIES}
