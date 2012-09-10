@@ -252,6 +252,11 @@ _add_possibly_cuda_library(osd_dynamic SHARED
 )
 
 set_target_properties(osd_dynamic PROPERTIES OUTPUT_NAME osd CLEAN_DIRECT_OUTPUT 1)
+if(WIN32)
+    set_target_properties(osd_dynamic PROPERTIES
+        COMPILE_FLAGS "/DOSD_INTERNAL /DOSD_DLL"
+        )
+endif()
 
 target_link_libraries(osd_dynamic
     ${PLATFORM_LIBRARIES}
