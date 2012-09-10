@@ -455,6 +455,11 @@ if (NOT IOS)
     )
 
     set_target_properties(osd_dynamic_cpu PROPERTIES OUTPUT_NAME osdCPU CLEAN_DIRECT_OUTPUT 1)
+    if(WIN32)
+	set_target_properties(osd_dynamic_cpu PROPERTIES
+	    COMPILE_FLAGS "/DOSD_INTERNAL /DOSD_DLL"
+	    )
+    endif()
 
     target_link_libraries(osd_dynamic_cpu
         ${PLATFORM_LIBRARIES}
@@ -469,6 +474,11 @@ if (NOT IOS)
     )
 
     set_target_properties(osd_dynamic_gpu PROPERTIES OUTPUT_NAME osdGPU CLEAN_DIRECT_OUTPUT 1)
+    if(WIN32)
+	set_target_properties(osd_dynamic_gpu PROPERTIES
+	    COMPILE_FLAGS "/DOSD_INTERNAL /DOSD_DLL"
+	    )
+    endif()
 
     target_link_libraries(osd_dynamic_gpu
         osd_dynamic_cpu
