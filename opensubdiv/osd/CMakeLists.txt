@@ -447,7 +447,7 @@ target_link_libraries(osd_static_gpu
 
 
 
-if (NOT WIN32 AND NOT IOS)
+if (NOT IOS)
     _add_possibly_cuda_library(osd_dynamic_cpu SHARED
         ${CPU_SOURCE_FILES}
         ${PRIVATE_HEADER_FILES}
