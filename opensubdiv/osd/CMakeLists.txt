@@ -243,22 +243,19 @@ target_link_libraries(osd_static
     ${PLATFORM_LIBRARIES}
 )
 
-if (NOT WIN32)
-    _add_possibly_cuda_library(osd_dynamic SHARED
-        ${SOURCE_FILES}
-        ${PRIVATE_HEADER_FILES}
-        ${PUBLIC_HEADER_FILES}
-        ${KERNEL_FILES}
-        ${INC_FILES}
-    )
+_add_possibly_cuda_library(osd_dynamic SHARED
+    ${SOURCE_FILES}
+    ${PRIVATE_HEADER_FILES}
+    ${PUBLIC_HEADER_FILES}
+    ${KERNEL_FILES}
+    ${INC_FILES}
+)
 
-    set_target_properties(osd_dynamic PROPERTIES OUTPUT_NAME osd CLEAN_DIRECT_OUTPUT 1)
+set_target_properties(osd_dynamic PROPERTIES OUTPUT_NAME osd CLEAN_DIRECT_OUTPUT 1)
 
-    target_link_libraries(osd_dynamic
-        ${PLATFORM_LIBRARIES}
-    )
-
-endif()
+target_link_libraries(osd_dynamic
+    ${PLATFORM_LIBRARIES}
+)
 
 
 install( FILES ${PUBLIC_HEADER_FILES}
