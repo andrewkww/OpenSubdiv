@@ -60,6 +60,7 @@
 #include <string>
 #include <vector>
 
+#include "../define.h"
 #include "../version.h"
 
 #include "../osd/vertex.h"
@@ -83,7 +84,7 @@ class OsdKernelDispatcher;
 class OsdElementArrayBuffer;
 class OsdPtexCoordinatesTextureBuffer;
 
-class OsdMesh {
+class OSD_API OsdMesh {
 
 public:
     OsdMesh();

@@ -64,6 +64,7 @@
 #endif
 
 #include "../version.h"
+#include "../define.h"
 #include "../osd/kernelDispatcher.h"
 
 namespace OpenSubdiv {
@@ -123,7 +124,7 @@ public:
     static OsdKernelDispatcher * Create(int levels) {
         return new OsdGlslKernelDispatcher(levels);
     }
-    static void Register() {
+    static OSD_API void Register() {
         Factory::GetInstance().Register(Create, kGLSL);
     }
 

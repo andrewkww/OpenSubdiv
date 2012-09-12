@@ -68,10 +68,12 @@
 
 #include <string.h> // memcpy (tobe moved to cpp)
 
+#include "../define.h"
+
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {
 
-class OsdVertexBuffer {
+class OSD_API OsdVertexBuffer {
 public:
     OsdVertexBuffer(int numElements) : _numElements(numElements) {}
     virtual ~OsdVertexBuffer();

@@ -58,6 +58,7 @@
 #define OSD_CUDA_DISPATCHER_H
 
 #include "../version.h"
+#include "../define.h"
 #include "../osd/kernelDispatcher.h"
 #include "../osd/vertexBuffer.h"
 
@@ -141,7 +142,7 @@ public:
     static OsdKernelDispatcher * Create(int levels) {
         return new OsdCudaKernelDispatcher(levels);
     }
-    static void Register() {
+    static OSD_API void Register() {
         Factory::GetInstance().Register(Create, kCUDA);
     }
 

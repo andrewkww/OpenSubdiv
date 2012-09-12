@@ -171,7 +171,7 @@ protected:
             return _instance;
         }
 
-        static Factory _instance;
+        static OSD_API Factory _instance;
 
     protected:
         friend class OsdCpuKernelDispatcher;

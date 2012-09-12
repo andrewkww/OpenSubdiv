@@ -58,6 +58,7 @@
 #define OSD_ELEMENT_ARRAY_BUFFER_H
 
 #include "../version.h"
+#include "../define.h"
 
 #include "../far/mesh.h"
 #include "../osd/vertex.h"
@@ -74,7 +75,7 @@
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {
 
-class OsdElementArrayBuffer {
+class OSD_API OsdElementArrayBuffer {
 
     // note: This class is transitional.
     // Currently this class is tailored for OpenGL drawing with uniform dense quads.

@@ -58,6 +58,7 @@
 #define OSD_CPU_DISPATCHER_H
 
 #include "../version.h"
+#include "../define.h"
 #include "../osd/kernelDispatcher.h"
 
 namespace OpenSubdiv {
@@ -116,7 +117,7 @@ public:
 
     virtual void Synchronize();
 
-    static void Register();
+    static OSD_API void Register();
 
 protected:
 
