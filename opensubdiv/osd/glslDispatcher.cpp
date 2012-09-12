@@ -102,6 +102,19 @@ std::vector<OsdGlslKernelDispatcher::ComputeShader> OsdGlslKernelDispatcher::sha
 OsdGlslKernelDispatcher::OsdGlslKernelDispatcher(int levels)
     : OsdKernelDispatcher(levels)
 {
+#if not defined(__APPLE__)
+    if(!GLEW_VERSION_4_0 && !GLEW_ARB_shader_subroutine)
+    {
+        printf("Error: OpenGL is missing support for shader subroutine, which "
+                "is required by OsdGlslKernelDispatcher.\n"
+                "This means the system must support either OpenGL 4.0, or have "
+                "the extension: GL_ARB_shader_subroutine.\n");
+        printf("\n");
+        PRINT_GL_INFO();
+        printf("GL_ARB_shader_subroutine: %s\n", GLEW_ARB_shader_subroutine ? "Yes" : "No");
+    }
+#endif
+
     _currentVertexBuffer = 0;
     _currentVaryingBuffer = 0;
     _shader = 0;

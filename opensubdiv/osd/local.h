@@ -17,5 +17,9 @@
 //#define OSD_DEBUG(...) printf(__VA_ARGS__);
 #define OSD_DEBUG(...)
 
+#define PRINT_GL_INFO() \
+    printf("Renderer: %s\n", glGetString(GL_RENDERER)); \
+    printf("Vendor: %s\n", glGetString(GL_VENDOR)); \
+    printf("OpenGL version: %s\n", glGetString(GL_VERSION));
 
 #endif // OSD_LOCAL_H
