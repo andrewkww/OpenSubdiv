@@ -193,12 +193,6 @@ endif()
 # Link examples & regressions dynamically against Osd
 set( OSD_LINK_TARGET osd_dynamic )
 
-if (WIN32)
-    # Link examples & regressions statically against Osd for
-    # Windows until all the kinks can be worked out.
-    set( OSD_LINK_TARGET osd_static )
-endif()
-
 if(MSVC)
     # MSVC is unfortunately not standard conforming with regards to
     # the alternative names for logical and bitwise operators:
