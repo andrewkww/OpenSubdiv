@@ -415,10 +415,6 @@ endif()
 set( OSD_LINK_TARGET osd_dynamic_cpu osd_dynamic_gpu )
 
 if (WIN32)
-    # Link examples & regressions statically against Osd for
-    # Windows until all the kinks can be worked out.
-    set( OSD_LINK_TARGET osd_static_cpu osd_static_gpu )
-
     if (DXSDK_FOUND)
         add_definitions(
             -DOPENSUBDIV_HAS_DX11SDK
