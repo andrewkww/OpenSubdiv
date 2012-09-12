@@ -82,11 +82,11 @@ typedef enum {
 
 typedef void (*OsdErrorCallbackFunc)(OsdErrorType err, const char *message);
 
-void OsdSetErrorCallback(OsdErrorCallbackFunc func);
+void OSD_API OsdSetErrorCallback(OsdErrorCallbackFunc func);
 
-void OsdError(OsdErrorType err);
+void OSD_API OsdError(OsdErrorType err);
 
-void OsdError(OsdErrorType err, const char *format, ...);
+void OSD_API OsdError(OsdErrorType err, const char *format, ...);
 
 } // end namespace OPENSUBDIV_VERSION
 using namespace OPENSUBDIV_VERSION;

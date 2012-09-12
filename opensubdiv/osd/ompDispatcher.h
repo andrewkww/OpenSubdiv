@@ -67,7 +67,7 @@ namespace OPENSUBDIV_VERSION {
 
 class OsdCpuComputeContext;
 
-class OsdOmpKernelDispatcher : public FarDispatcher<OsdVertex>
+class OSD_API OsdOmpKernelDispatcher : public FarDispatcher<OsdVertex>
 {
 public:
     OsdOmpKernelDispatcher();

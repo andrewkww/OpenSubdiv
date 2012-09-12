@@ -79,7 +79,7 @@
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {
 
-class OsdGLDrawContext : public OsdDrawContext {
+class OSD_API OsdGLDrawContext : public OsdDrawContext {
 public:
     typedef GLuint VertexBufferBinding;
 

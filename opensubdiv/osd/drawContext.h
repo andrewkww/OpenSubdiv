@@ -105,7 +105,7 @@ struct OsdPatchDescriptor {
     unsigned char numElements:5; //  0-31
 };
 
-bool operator< (OsdPatchDescriptor const & a,
+bool OSD_API operator< (OsdPatchDescriptor const & a,
                 OsdPatchDescriptor const & b);
 
 
@@ -122,7 +122,7 @@ typedef std::vector<OsdPatchArray> OsdPatchArrayVector;
 
 ////////////////////////////////////////////////////////////
 
-struct OsdDrawContext {
+struct OSD_API OsdDrawContext {
     OsdDrawContext() : isAdaptive(false) {}
     virtual ~OsdDrawContext();
 

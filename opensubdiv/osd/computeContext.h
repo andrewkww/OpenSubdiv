@@ -78,7 +78,7 @@ template <class T> class FarMesh;
             F_ITa,
             TABLE_MAX }; }
 
-class OsdComputeContext : OsdNonCopyable<OsdComputeContext> {
+class OSD_API OsdComputeContext : OsdNonCopyable<OsdComputeContext> {
 public:
     virtual ~OsdComputeContext() {}
 

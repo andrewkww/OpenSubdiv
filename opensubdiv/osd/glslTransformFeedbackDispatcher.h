@@ -67,7 +67,7 @@ namespace OPENSUBDIV_VERSION {
 
 class OsdGLSLTransformFeedbackComputeContext;
 
-class OsdGLSLTransformFeedbackKernelDispatcher
+class OSD_API OsdGLSLTransformFeedbackKernelDispatcher
     : public FarDispatcher<OsdVertex> {
 
 public:

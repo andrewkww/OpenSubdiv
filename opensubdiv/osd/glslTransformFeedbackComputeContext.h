@@ -140,7 +140,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-class OsdGLSLTransformFeedbackComputeContext : public OsdComputeContext {
+class OSD_API OsdGLSLTransformFeedbackComputeContext : public OsdComputeContext {
 public:
     static OsdGLSLTransformFeedbackComputeContext * Create(FarMesh<OsdVertex> *farmesh);
 

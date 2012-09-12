@@ -75,7 +75,7 @@ class OsdGLSLComputeKernelBundle;
 /// OsdGLSLComputeController is a compute controller class to launch
 /// GLSLCompute transfrom feedback subdivision kernels. It requires
 /// OsdGLVertexBufferInterface as arguments of Refine function.
-class OsdGLSLComputeController {
+class OSD_API OsdGLSLComputeController {
 public:
     typedef OsdGLSLComputeContext ComputeContext;
 

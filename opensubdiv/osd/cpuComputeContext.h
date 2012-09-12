@@ -70,7 +70,7 @@ namespace OPENSUBDIV_VERSION {
 
 struct OsdVertexDescriptor;
 
-class OsdCpuComputeContext : public OsdComputeContext {
+class OSD_API OsdCpuComputeContext : public OsdComputeContext {
 public:
     static OsdCpuComputeContext * Create(FarMesh<OsdVertex> *farmesh);
 

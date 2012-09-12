@@ -75,7 +75,7 @@ class OsdGLSLTransformFeedbackKernelBundle;
 /// OsdGLSLTransformFeedbackComputeController is a compute controller class to launch
 /// GLSLTransformFeedback transfrom feedback subdivision kernels. It requires
 /// OsdGLVertexBufferInterface as arguments of Refine function.
-class OsdGLSLTransformFeedbackComputeController {
+class OSD_API OsdGLSLTransformFeedbackComputeController {
 public:
     typedef OsdGLSLTransformFeedbackComputeContext ComputeContext;
 

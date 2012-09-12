@@ -139,7 +139,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-class OsdGLSLComputeContext : public OsdComputeContext {
+class OSD_API OsdGLSLComputeContext : public OsdComputeContext {
 public:
     static OsdGLSLComputeContext * Create(FarMesh<OsdVertex> *farmesh);
 

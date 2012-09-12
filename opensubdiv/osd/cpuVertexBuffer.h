@@ -65,7 +65,7 @@ namespace OPENSUBDIV_VERSION {
 /// \brief Concrete vertex buffer class for cpu subvision.
 /// OsdCpuVertexBuffer implements OsdCudaVertexBufferInterface. An instance
 /// of this buffer class can be passed to OsdCpuComputeController
-class OsdCpuVertexBuffer {
+class OSD_API OsdCpuVertexBuffer {
 public:
     /// Creator. Returns NULL if error.
     static OsdCpuVertexBuffer * Create(int numElements, int numVertices);

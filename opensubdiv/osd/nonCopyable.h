@@ -61,7 +61,7 @@ namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {
 
 template <class T>
-class OsdNonCopyable {
+class OSD_API OsdNonCopyable {
 
 protected:
     OsdNonCopyable() {}
