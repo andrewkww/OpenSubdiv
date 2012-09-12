@@ -131,6 +131,10 @@ set_target_properties(maya_plugin
     LINK_FLAGS "${PLATFORM_LINK_FLAGS}"
 )
 
+if(WIN32 AND ${OSD_LINK_TARGET} STREQUAL "osd_dynamic")
+    add_definitions(/DOSD_DLL)
+endif()
+
 target_link_libraries(maya_plugin
     ${OSD_LINK_TARGET}
     ${MAYA_Foundation_LIBRARY}

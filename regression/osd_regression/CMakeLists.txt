@@ -151,7 +151,9 @@ if( CUDA_FOUND )
     endif()
 endif()
 
-
+if(WIN32 AND ${OSD_LINK_TARGET} STREQUAL "osd_dynamic")
+    add_definitions(/DOSD_DLL)
+endif()
 
 target_link_libraries(osd_regression
     ${OSD_LINK_TARGET}

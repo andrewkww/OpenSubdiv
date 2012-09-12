@@ -61,6 +61,10 @@ set(SHADER_FILES
      shader.glsl
 )
 
+if(WIN32 AND ${OSD_LINK_TARGET} STREQUAL "osd_dynamic")
+    add_definitions(/DOSD_DLL)
+endif()
+
 set(PLATFORM_LIBRARIES
     ${OSD_LINK_TARGET}
     ${OPENGL_LIBRARY}
