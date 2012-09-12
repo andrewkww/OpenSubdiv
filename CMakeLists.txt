@@ -413,6 +413,7 @@ endif()
 
 # Link examples & regressions dynamically against Osd
 set( OSD_LINK_TARGET osd_dynamic_cpu osd_dynamic_gpu )
+set( OSD_LINK_DYNAMIC 1 )
 
 if (WIN32)
     if (DXSDK_FOUND)

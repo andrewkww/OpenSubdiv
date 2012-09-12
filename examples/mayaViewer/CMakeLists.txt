@@ -81,6 +81,10 @@ include_directories(
     ${GLEW_INCLUDE_DIR}
 )
 
+if(WIN32 AND OSD_LINK_DYNAMIC)
+    add_definitions(-DOSD_DLL)
+endif()
+
 set(SHADER_FILES
      shader.glsl
 )
