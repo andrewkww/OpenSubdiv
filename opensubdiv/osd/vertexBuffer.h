@@ -85,6 +85,10 @@ public:
     }
 
 protected:
+    OsdVertexBuffer(const OsdVertexBuffer &o){}
+    OsdVertexBuffer& operator=(const OsdVertexBuffer &){return *this;}
+
+protected:
     int _numElements;
 };
 
@@ -105,6 +109,12 @@ public:
     void GetBufferData(float * data, int firstVert, int numVerts);
 
 protected:
+    OsdGpuVertexBuffer(const OsdGpuVertexBuffer &o)
+    :OsdVertexBuffer(o)
+    {};
+    OsdGpuVertexBuffer& operator=(const OsdGpuVertexBuffer &){return *this;};
+
+protected:
     GLuint _vbo;
 };
 
@@ -121,6 +131,12 @@ public:
     }
 
     virtual GLuint GetGpuBuffer();
+
+protected:
+    OsdCpuVertexBuffer(const OsdCpuVertexBuffer &o)
+    :OsdVertexBuffer(o)
+    {}
+    OsdCpuVertexBuffer& operator=(const OsdCpuVertexBuffer &){return *this;}
 
 protected:
     float *_cpuVbo;
