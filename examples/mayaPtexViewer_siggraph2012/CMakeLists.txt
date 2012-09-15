@@ -86,6 +86,9 @@ set(SOURCE_FILES
 )
 
 if(CUDA_FOUND)
+    include_directories(
+        ${CUDA_INCLUDE_DIRS}
+        )
     list(APPEND SOURCE_FILES
         cudaUtil.cpp
         )
