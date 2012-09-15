@@ -95,11 +95,15 @@
 
 #include <osd/mesh.h>
 #include <osd/cpuDispatcher.h>
+#ifdef OPENSUBDIV_HAS_OPENCL
 #include <osd/clDispatcher.h>
-#include <osd/cudaDispatcher.h>
+#endif
 #include <osd/elementArrayBuffer.h>
 
+#ifdef OPENSUBDIV_HAS_CUDA
+#include <osd/cudaDispatcher.h>
 extern void cudaInit();
+#endif
 #include "hbrUtil.h"
 
 #define CHECK_GL_ERROR(...)  \
@@ -245,12 +249,18 @@ OpenSubdivShader::initialize()
 
     aKernel = enumAttr.create("kernel", "kn");
     enumAttr.addField("CPU", OpenSubdiv::OsdKernelDispatcher::kCPU);
+#ifdef OPENSUBDIV_HAS_OPENMP
     if (OpenSubdiv::OsdKernelDispatcher::HasKernelType(OpenSubdiv::OsdKernelDispatcher::kOPENMP))
         enumAttr.addField("OpenMP", OpenSubdiv::OsdKernelDispatcher::kOPENMP);
+#endif
+#ifdef OPENSUBDIV_HAS_OPENCL
     if (OpenSubdiv::OsdKernelDispatcher::HasKernelType(OpenSubdiv::OsdKernelDispatcher::kCL))
         enumAttr.addField("CL", OpenSubdiv::OsdKernelDispatcher::kCL);
+#endif
+#ifdef OPENSUBDIV_HAS_CUDA
     if (OpenSubdiv::OsdKernelDispatcher::HasKernelType(OpenSubdiv::OsdKernelDispatcher::kCUDA))
         enumAttr.addField("CUDA", OpenSubdiv::OsdKernelDispatcher::kCUDA);
+#endif
     enumAttr.setInternal(true);
 
     aDiffuse = numAttr.createColor("diffuse", "d");
@@ -922,9 +932,13 @@ initializePlugin( MObject obj )
 
     glewInit();
     OpenSubdiv::OsdCpuKernelDispatcher::Register();
+#ifdef OPENSUBDIV_HAS_CUDA
     OpenSubdiv::OsdCudaKernelDispatcher::Register();
-    OpenSubdiv::OsdClKernelDispatcher::Register();
     cudaInit();
+#endif
+#ifdef OPENSUBDIV_HAS_OPENCL
+    OpenSubdiv::OsdClKernelDispatcher::Register();
+#endif
 
     // shader node
     status = plugin.registerNode( "openSubdivShader",
