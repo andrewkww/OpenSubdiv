@@ -83,8 +83,13 @@ include_directories(
 set(SOURCE_FILES
     OpenSubdivPtexShader.cpp
     hbrUtil.cpp
-    cudaUtil.cpp
 )
+
+if(CUDA_FOUND)
+    list(APPEND SOURCE_FILES
+        cudaUtil.cpp
+        )
+endif()
 
 set(HEADER_FILES
 )
