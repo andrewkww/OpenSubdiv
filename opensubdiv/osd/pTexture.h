@@ -67,6 +67,7 @@
 #endif
 
 #include "../version.h"
+#include "../define.h"
 
 #include <vector>
 #include <string>
@@ -99,7 +100,7 @@ namespace OPENSUBDIV_VERSION {
 // accessed by GLSL shaders.
 //
 
-class OsdPTexture {
+class OSD_API OsdPTexture {
 public:
 
     static OsdPTexture * Create( PtexTexture * reader, unsigned long int targetMemory );
@@ -148,7 +149,9 @@ private:
            _layout,   // per-face lookup table (vec4 : top-left corner & width / height)
            _texels;   // texel data
 
-    static int _gutterWidth, _pageMargin, _gutterDebug;
+    static int _gutterWidth;
+    static int _pageMargin;
+    static int _gutterDebug;
 };
 
 } // end namespace OPENSUBDIV_VERSION
