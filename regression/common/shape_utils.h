@@ -564,7 +564,12 @@ nexttag: ;
 
 //------------------------------------------------------------------------------
 template <class T> OpenSubdiv::HbrMesh<T> *
-createMesh( Scheme scheme=kCatmark) {
+createMesh( Scheme scheme=kCatmark,
+        int fvarcount = 0,
+        const int *fvarindices = 0,
+        const int *fvarwidths = 0,
+        int totalfvarwidth = 0
+        ) {
 
   OpenSubdiv::HbrMesh<T> * mesh = 0;
 
@@ -573,9 +578,9 @@ createMesh( Scheme scheme=kCatmark) {
   static OpenSubdiv::HbrCatmarkSubdivision<T>  _catmark;
 
   switch (scheme) {
-    case kBilinear : mesh = new OpenSubdiv::HbrMesh<T>( &_bilinear ); break;
-    case kLoop     : mesh = new OpenSubdiv::HbrMesh<T>( &_loop     ); break;
-    case kCatmark  : mesh = new OpenSubdiv::HbrMesh<T>( &_catmark  ); break;
+    case kBilinear : mesh = new OpenSubdiv::HbrMesh<T>( &_bilinear, fvarcount, fvarindices, fvarwidths, totalfvarwidth ); break;
+    case kLoop     : mesh = new OpenSubdiv::HbrMesh<T>( &_loop, fvarcount, fvarindices, fvarwidths, totalfvarwidth ); break;
+    case kCatmark  : mesh = new OpenSubdiv::HbrMesh<T>( &_catmark, fvarcount, fvarindices, fvarwidths, totalfvarwidth ); break;
   }
 
   return mesh;
