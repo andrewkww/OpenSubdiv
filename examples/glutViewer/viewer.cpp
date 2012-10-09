@@ -265,7 +265,9 @@ std::vector<float> g_coarseVertexSharpness;
 
 OpenSubdiv::OsdMesh * g_osdmesh = 0;
 OpenSubdiv::OsdVertexBuffer * g_vertexBuffer = 0;
-OpenSubdiv::OsdElementArrayBuffer *g_elementArrayBuffer = 0;
+
+GLuint g_glVertexBuffer = 0;
+float* g_glVertexBufferData = NULL;
 
 //------------------------------------------------------------------------------
 inline void
@@ -393,7 +395,21 @@ updateGeom() {
     s.Stop();
     g_gpuTime = float(s.GetElapsed() * 1000.0f);
 
-    glBindBuffer(GL_ARRAY_BUFFER, g_vertexBuffer->GetGpuBuffer());
+    std::vector<int> indices = g_osdmesh->GetFarMesh()->GetFaceVertices(g_level);
+    float* vertices = ((OpenSubdiv::OsdCpuVertexBuffer*)g_vertexBuffer)->GetCpuBuffer();
+
+    for(unsigned int i = 0; i < indices.size(); i++)
+    {
+        g_glVertexBufferData[i*6+0] = vertices[indices[i]*6+0];
+        g_glVertexBufferData[i*6+1] = vertices[indices[i]*6+1];
+        g_glVertexBufferData[i*6+2] = vertices[indices[i]*6+2];
+        g_glVertexBufferData[i*6+3] = vertices[indices[i]*6+3];
+        g_glVertexBufferData[i*6+4] = vertices[indices[i]*6+4];
+        g_glVertexBufferData[i*6+5] = vertices[indices[i]*6+5];
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, g_glVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, indices.size()*sizeof(float)*6, g_glVertexBufferData, GL_STREAM_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -618,9 +634,16 @@ createOsdMesh( const char * shape, int level, int kernel, Scheme scheme=kCatmark
     // Hbr mesh can be deleted
     delete hmesh;
 
-    // update element array buffer
-    if (g_elementArrayBuffer) delete g_elementArrayBuffer;
-    g_elementArrayBuffer = g_osdmesh->CreateElementArrayBuffer(level);
+    if(!g_glVertexBuffer)
+    {
+        glDeleteBuffers(1, &g_glVertexBuffer);
+    }
+    glGenBuffers(1, &g_glVertexBuffer);
+    if(!g_glVertexBufferData)
+    {
+        delete [] g_glVertexBufferData;
+    }
+    g_glVertexBufferData = new float[g_osdmesh->GetFarMesh()->GetFaceVertices(level).size() * 6];
 
     g_scheme = scheme;
 
@@ -715,15 +738,12 @@ display() {
     glTranslatef(-g_center[0], -g_center[1], -g_center[2]);
     glRotatef(-90, 1, 0, 0); // z-up model
 
-    GLuint bVertex = g_vertexBuffer->GetGpuBuffer();
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, bVertex);
+    glBindBuffer(GL_ARRAY_BUFFER, g_glVertexBuffer);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof (GLfloat) * 6, 0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof (GLfloat) * 6, (float*)12);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_elementArrayBuffer->GetGlBuffer());
 
     GLenum primType = GL_LINES_ADJACENCY;
     if (g_scheme == kLoop) {
@@ -734,7 +754,7 @@ display() {
     }
 
     if (g_wire > 0) {
-        glDrawElements(primType, g_elementArrayBuffer->GetNumIndices(), GL_UNSIGNED_INT, NULL);
+        glDrawArrays(primType, 0, (GLsizei) g_osdmesh->GetFarMesh()->GetFaceVertices(g_level).size());
     }
     
     if (g_wire == 0 || g_wire == 2) {
@@ -747,7 +767,7 @@ display() {
         } else {
             glProgramUniform4f(lineProgram, fragColor, 1, 1, 1, 1);
         }
-        glDrawElements(primType, g_elementArrayBuffer->GetNumIndices(), GL_UNSIGNED_INT, NULL);
+        glDrawArrays(primType, 0, (GLsizei) g_osdmesh->GetFarMesh()->GetFaceVertices(g_level).size());
     }
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
@@ -823,9 +843,6 @@ void quit() {
 
     if (g_vertexBuffer)
         delete g_vertexBuffer;
-
-    if (g_elementArrayBuffer)
-        delete g_elementArrayBuffer;
 
 #ifdef OPENSUBDIV_HAS_CUDA
     cudaDeviceReset();
