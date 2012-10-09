@@ -58,6 +58,7 @@
 #define SHAPE_UTILS_H
 
 #include <hbr/mesh.h>
+#include <hbr/fvarData.h>
 #include <hbr/bilinear.h>
 #include <hbr/loop.h>
 #include <hbr/catmark.h>
@@ -656,6 +657,18 @@ createTopology( shape const * sh, OpenSubdiv::HbrMesh<T> * mesh, Scheme scheme) 
 
           face->SetPtexIndex(ptxidx);
 
+          float colors[][3] = {
+              { 1.0f, 0.0f, 0.0f, },
+              { 0.0f, 1.0f, 0.0f, },
+              { 0.0f, 0.0f, 1.0f, },
+              { 1.0f, 1.0f, 0.0f, }
+          };
+          for(int j=0;j<nv;j++) {
+              OpenSubdiv::HbrVertex<T> *v = mesh->GetVertex( fv[j] );
+              OpenSubdiv::HbrFVarData<T> &fvardata = v->NewFVarData(face);
+              fvardata.SetAllData(mesh->GetTotalFVarWidth(), colors[j]);
+          }
+
           if ( (scheme==kCatmark or scheme==kBilinear) and nv != 4 )
               ptxidx+=nv;
           else
@@ -665,6 +678,7 @@ createTopology( shape const * sh, OpenSubdiv::HbrMesh<T> * mesh, Scheme scheme) 
       }
 
       mesh->SetInterpolateBoundaryMethod( OpenSubdiv::HbrMesh<T>::k_InterpolateBoundaryEdgeOnly );
+      //mesh->SetFVarInterpolateBoundaryMethod( OpenSubdiv::HbrMesh<T>::k_InterpolateBoundaryAlwaysSharp );
 
       applyTags<T>( mesh, sh );
 
@@ -688,13 +702,18 @@ simpleHbr(char const * shapestr, Scheme scheme, std::vector<float> * verts=0) {
   return mesh;
 }
 
+int fvarcount = 3;
+const int fvarindices[] = {0, 1, 2};
+const int fvarwidths[] = {1, 1, 1};
+int totalfvarwidth = 3;
+
 //------------------------------------------------------------------------------
 template <class T> OpenSubdiv::HbrMesh<T> *
 simpleHbr(char const * shapestr, Scheme scheme, std::vector<float> & verts) {
 
   shape * sh = shape::parseShape( shapestr );
 
-  OpenSubdiv::HbrMesh<T> * mesh = createMesh<T>(scheme);
+  OpenSubdiv::HbrMesh<T> * mesh = createMesh<T>(scheme, fvarcount, fvarindices, fvarwidths, totalfvarwidth);
 
   createVertices<T>(sh, mesh, verts);
 
