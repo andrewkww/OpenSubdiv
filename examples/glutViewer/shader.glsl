@@ -64,6 +64,7 @@
 
 layout (location=0) in vec3 position;
 layout (location=1) in vec3 normal;
+layout (location=2) in vec3 color;
 
 out vec3 vPosition;
 out vec3 vNormal;
@@ -73,7 +74,7 @@ void main()
 {
     vPosition = position;
     vNormal = normal;
-    vColor = vec4(1, 1, 1, 1);
+    vColor = vec4(color, 1);
 }
 
 #endif
@@ -97,6 +98,7 @@ layout(line_strip, max_vertices = 5) out;
 
 in vec3 vPosition[4];
 in vec3 vNormal[4];
+in vec4 vColor[4];
 
 #else // PRIM_TRI
 
@@ -112,6 +114,7 @@ layout(line_strip, max_vertices = 4) out;
 
 in vec3 vPosition[3];
 in vec3 vNormal[3];
+in vec4 vColor[3];
 
 #endif // PRIM_TRI/QUAD
 
@@ -129,6 +132,7 @@ void emit(int index)
     Peye = vPosition[index];
     gl_Position = objectToClipMatrix * vec4(vPosition[index], 1);
     Neye = (objectToEyeMatrix * vec4(vNormal[index], 0)).xyz;
+    Cout = vColor[index];
     EmitVertex();
 }
 
@@ -199,29 +203,7 @@ uniform LightSource lightSource[NUM_LIGHTS];
 vec4
 lighting(vec3 Peye, vec3 Neye)
 {
-    vec4 color = vec4(0);
-    vec4 material = vec4(0.4, 0.4, 0.8, 1);
-
-    for (int i = 0; i < NUM_LIGHTS; ++i) {
-
-        vec4 Plight = lightSource[i].position;
-
-        vec3 l = (Plight.w == 0.0)
-                    ? normalize(Plight.xyz) : normalize(Plight.xyz - Peye);
-
-        vec3 n = normalize(Neye);
-        vec3 h = normalize(l + vec3(0,0,1));    // directional viewer
-
-        float d = max(0.0, dot(n, l));
-        float s = pow(max(0.0, dot(n, h)), 500.0f);
-
-        color += lightSource[i].ambient * material
-            + d * lightSource[i].diffuse * material
-            + s * lightSource[i].specular;
-    }
-
-    color.a = 1;
-    return color;
+    return Cout;
 }
 
 #ifdef GEOMETRY_OUT_LINE

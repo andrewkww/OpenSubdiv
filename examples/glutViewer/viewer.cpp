@@ -266,6 +266,7 @@ std::vector<float> g_coarseVertexSharpness;
 OpenSubdiv::OsdMesh * g_osdmesh = 0;
 OpenSubdiv::OsdVertexBuffer * g_vertexBuffer = 0;
 
+float* g_fvarData = NULL;
 GLuint g_glVertexBuffer = 0;
 float* g_glVertexBufferData = NULL;
 
@@ -400,16 +401,16 @@ updateGeom() {
 
     for(unsigned int i = 0; i < indices.size(); i++)
     {
-        g_glVertexBufferData[i*6+0] = vertices[indices[i]*6+0];
-        g_glVertexBufferData[i*6+1] = vertices[indices[i]*6+1];
-        g_glVertexBufferData[i*6+2] = vertices[indices[i]*6+2];
-        g_glVertexBufferData[i*6+3] = vertices[indices[i]*6+3];
-        g_glVertexBufferData[i*6+4] = vertices[indices[i]*6+4];
-        g_glVertexBufferData[i*6+5] = vertices[indices[i]*6+5];
+        g_glVertexBufferData[i*9+0] = vertices[indices[i]*6+0];
+        g_glVertexBufferData[i*9+1] = vertices[indices[i]*6+1];
+        g_glVertexBufferData[i*9+2] = vertices[indices[i]*6+2];
+        g_glVertexBufferData[i*9+3] = vertices[indices[i]*6+3];
+        g_glVertexBufferData[i*9+4] = vertices[indices[i]*6+4];
+        g_glVertexBufferData[i*9+5] = vertices[indices[i]*6+5];
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, g_glVertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, indices.size()*sizeof(float)*6, g_glVertexBufferData, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, indices.size()*sizeof(float)*9, g_glVertexBufferData, GL_STREAM_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -625,10 +626,44 @@ createOsdMesh( const char * shape, int level, int kernel, Scheme scheme=kCatmark
     // generate Osd mesh from Hbr mesh
     if (g_osdmesh) delete g_osdmesh;
     g_osdmesh = new OpenSubdiv::OsdMesh();
-    g_osdmesh->Create(hmesh, level, kernel);
+    std::vector<int> remappingTable;
+    g_osdmesh->Create(hmesh, level, kernel, &remappingTable);
     if (g_vertexBuffer) {
         delete g_vertexBuffer;
         g_vertexBuffer = NULL;
+    }
+
+    std::vector<int> faceVertices = g_osdmesh->GetFarMesh()->GetFaceVertices(level);
+
+    if(!g_fvarData)
+    {
+        delete [] g_fvarData;
+    }
+    g_fvarData = new float[g_osdmesh->GetFarMesh()->GetNumVertices() * 3];
+
+    // gather all fvar data
+    for(int i = 0; i < hmesh->GetNumFaces(); i++)
+    {
+        OpenSubdiv::OsdHbrFace* face = hmesh->GetFace(i);
+        //if(!face)
+        //{
+        //    continue;
+        //}
+        //if(face->GetDepth() != g_level)
+        //{
+        //    continue;
+        //}
+
+        for(int j = 0; j < face->GetNumVertices(); j++)
+        {
+            OpenSubdiv::OsdHbrVertex* vertex = face->GetVertex(j);
+            int farID = remappingTable[vertex->GetID()];
+
+            float* f = vertex->GetFVarData(face).GetData(0);
+            g_fvarData[farID * 3 + 0] = f[0];
+            g_fvarData[farID * 3 + 1] = f[1];
+            g_fvarData[farID * 3 + 2] = f[2];
+        }
     }
 
     // Hbr mesh can be deleted
@@ -643,7 +678,15 @@ createOsdMesh( const char * shape, int level, int kernel, Scheme scheme=kCatmark
     {
         delete [] g_glVertexBufferData;
     }
-    g_glVertexBufferData = new float[g_osdmesh->GetFarMesh()->GetFaceVertices(level).size() * 6];
+    g_glVertexBufferData = new float[faceVertices.size() * 9];
+
+    // set all fvar data
+    for(int i = 0; i < faceVertices.size(); i++)
+    {
+        g_glVertexBufferData[i*9 + 6] = g_fvarData[faceVertices[i] * 3 + 0];
+        g_glVertexBufferData[i*9 + 7] = g_fvarData[faceVertices[i] * 3 + 1];
+        g_glVertexBufferData[i*9 + 8] = g_fvarData[faceVertices[i] * 3 + 2];
+    }
 
     g_scheme = scheme;
 
@@ -740,10 +783,12 @@ display() {
 
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, g_glVertexBuffer);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof (GLfloat) * 6, 0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof (GLfloat) * 6, (float*)12);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof (GLfloat) * 9, 0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof (GLfloat) * 9, (float*)12);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof (GLfloat) * 9, (float*)24);
 
     GLenum primType = GL_LINES_ADJACENCY;
     if (g_scheme == kLoop) {
@@ -771,6 +816,7 @@ display() {
     }
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
 
     glUseProgram(0);
 
