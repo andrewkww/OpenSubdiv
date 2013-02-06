@@ -428,18 +428,20 @@ target_link_libraries(osd_static_cpu
     ${PLATFORM_LIBRARIES}
 )
 
-_add_possibly_cuda_library(osd_static_gpu STATIC
-    ${GPU_SOURCE_FILES}
-    ${PRIVATE_HEADER_FILES}
-    ${PUBLIC_HEADER_FILES}
-    ${KERNEL_FILES}
-    ${INC_FILES}
-)
-set_target_properties(osd_static_gpu PROPERTIES OUTPUT_NAME osdGPU CLEAN_DIRECT_OUTPUT 1)
+if( OPENGL_FOUND OR OPENGLES_FOUND )
+    _add_possibly_cuda_library(osd_static_gpu STATIC
+        ${GPU_SOURCE_FILES}
+        ${PRIVATE_HEADER_FILES}
+        ${PUBLIC_HEADER_FILES}
+        ${KERNEL_FILES}
+        ${INC_FILES}
+    )
+    set_target_properties(osd_static_gpu PROPERTIES OUTPUT_NAME osdGPU CLEAN_DIRECT_OUTPUT 1)
 
-target_link_libraries(osd_static_gpu
-    ${PLATFORM_LIBRARIES}
-)
+    target_link_libraries(osd_static_gpu
+        ${PLATFORM_LIBRARIES}
+    )
+endif()
 
 
 
@@ -456,20 +458,22 @@ if (NOT WIN32 AND NOT IOS)
         ${PLATFORM_LIBRARIES}
     )
 
-    _add_possibly_cuda_library(osd_dynamic_gpu SHARED
-        ${GPU_SOURCE_FILES}
-        ${PRIVATE_HEADER_FILES}
-        ${PUBLIC_HEADER_FILES}
-        ${KERNEL_FILES}
-        ${INC_FILES}
-    )
+    if( OPENGL_FOUND OR OPENGLES_FOUND )
+        _add_possibly_cuda_library(osd_dynamic_gpu SHARED
+            ${GPU_SOURCE_FILES}
+            ${PRIVATE_HEADER_FILES}
+            ${PUBLIC_HEADER_FILES}
+            ${KERNEL_FILES}
+            ${INC_FILES}
+        )
 
-    set_target_properties(osd_dynamic_gpu PROPERTIES OUTPUT_NAME osdGPU CLEAN_DIRECT_OUTPUT 1)
+        set_target_properties(osd_dynamic_gpu PROPERTIES OUTPUT_NAME osdGPU CLEAN_DIRECT_OUTPUT 1)
 
-    target_link_libraries(osd_dynamic_gpu
-        osd_dynamic_cpu
-        ${PLATFORM_LIBRARIES}
-    )
+        target_link_libraries(osd_dynamic_gpu
+            osd_dynamic_cpu
+            ${PLATFORM_LIBRARIES}
+        )
+    endif()
 endif()
 
 
