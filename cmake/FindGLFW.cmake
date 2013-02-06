@@ -141,28 +141,30 @@ else ()
     else ()
         # (*)NIX
         
-        find_package(X11 REQUIRED)
-        
-        if(NOT X11_Xrandr_FOUND)
-            message(FATAL_ERROR "Xrandr library not found")
+        find_package(X11)
+
+        if(X11_FOUND)
+            if(NOT X11_Xrandr_FOUND)
+                message(FATAL_ERROR "Xrandr library not found")
+            endif()
+
+            find_library( GLFW_glfw_LIBRARY
+                NAMES
+                    glfw
+                    glfw3
+                PATHS
+                    ${GLFW_LOCATION}/lib
+                    $ENV{GLFW_LOCATION}/lib
+                    ${GLFW_LOCATION}/lib/x11
+                    $ENV{GLFW_LOCATION}/lib/x11
+                    /usr/lib
+                    /usr/local/lib
+                    /usr/openwin/lib
+                    /usr/X11R6/lib
+                DOC
+                    "The GLFW library"
+            )
         endif()
-        
-        find_library( GLFW_glfw_LIBRARY
-            NAMES 
-                glfw
-                glfw3
-            PATHS
-                ${GLFW_LOCATION}/lib
-                $ENV{GLFW_LOCATION}/lib
-                ${GLFW_LOCATION}/lib/x11
-                $ENV{GLFW_LOCATION}/lib/x11
-                /usr/lib
-                /usr/local/lib
-                /usr/openwin/lib
-                /usr/X11R6/lib
-            DOC 
-                "The GLFW library"
-        )
     endif (APPLE)
 endif (WIN32)
 
