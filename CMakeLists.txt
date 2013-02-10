@@ -167,6 +167,9 @@ elseif(MSVC)
     list(APPEND OSD_COMPILER_FLAGS
                     /W3     # Use warning level recommended for production purposes.
                     /WX     # Treat all compiler warnings as errors.
+
+                    # ignore warning C4640: construction of local static object is not thread-safe
+                    /wd 4640
                     
                     # Make sure WinDef.h does not define min and max macros which
                     # will conflict with std::min() and std::max().
