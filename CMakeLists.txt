@@ -173,6 +173,9 @@ elseif(MSVC)
                     /wd4350
                     # warning C4548: expression before comma has no effect; expected expression with side-effect
                     /wd4548
+
+                    # ignore warning C4640: construction of local static object is not thread-safe
+                    /wd 4640
                     
                     # Make sure WinDef.h does not define min and max macros which
                     # will conflict with std::min() and std::max().
