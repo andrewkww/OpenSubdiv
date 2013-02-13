@@ -79,7 +79,7 @@ if (WIN32)
 
     find_library( GLEW_LIBRARY
         NAMES
-            glew GLEW glew32s glew32
+            glew GLEW glew32 glew32s
         PATHS
             ${GLEW_LOCATION}/lib
             $ENV{GLEW_LOCATION}/lib
