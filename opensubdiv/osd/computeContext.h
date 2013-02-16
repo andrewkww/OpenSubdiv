@@ -57,6 +57,8 @@
 #ifndef OSD_COMPUTE_CONTEXT_H
 #define OSD_COMPUTE_CONTEXT_H
 
+#include "../version.h"
+
 #include "../osd/vertex.h"
 #include "../osd/nonCopyable.h"
 
