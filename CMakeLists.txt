@@ -83,15 +83,22 @@ if(LIBRARY_OUTPUT_PATH_ROOT)
          ${LIBRARY_OUTPUT_PATH_ROOT}/ )
 endif()
 
-# Set the directory where the executables will be stored.
-set(EXECUTABLE_OUTPUT_PATH
+# Set the directory where the runtime files will be stored.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
     ${PROJECT_BINARY_DIR}/bin
     CACHE PATH
-    "Directory where executables will be stored"
+    "Directory where runtime files will be stored"
+)
+
+# Set the directory where the archives will be stored.
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+    ${PROJECT_BINARY_DIR}/lib
+    CACHE PATH
+    "Directory where archives will be stored"
 )
 
 # Set the directory where the libraries will be stored.
-set(LIBRARY_OUTPUT_PATH
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
     ${PROJECT_BINARY_DIR}/lib
     CACHE PATH
     "Directory where all libraries will be stored"
