@@ -57,7 +57,7 @@
 #ifndef OSD_CPU_D3D11_VERTEX_BUFFER_H
 #define OSD_CPU_D3D11_VERTEX_BUFFER_H
 
-#include "../version.h"
+#include "../common.h"
 
 struct ID3D11Buffer;
 struct ID3D11Device;

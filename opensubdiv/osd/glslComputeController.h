@@ -58,7 +58,7 @@
 #ifndef OSD_GLSL_COMPUTE_CONTROLLER_H
 #define OSD_GLSL_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/glslComputeContext.h"
 #include "../osd/glslDispatcher.h"

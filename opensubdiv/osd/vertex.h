@@ -58,7 +58,7 @@
 #ifndef OSD_VERTEX_H
 #define OSD_VERTEX_H
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

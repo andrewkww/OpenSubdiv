@@ -57,7 +57,7 @@
 #ifndef OSD_CPU_DISPATCHER_H
 #define OSD_CPU_DISPATCHER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/vertex.h"
 #include "../far/dispatcher.h"

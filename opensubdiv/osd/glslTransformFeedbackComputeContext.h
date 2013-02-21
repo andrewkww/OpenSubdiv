@@ -74,7 +74,7 @@
     #include <GL/gl.h>
 #endif
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/table.h"
 #include "../far/vertexEditTables.h"

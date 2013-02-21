@@ -60,9 +60,9 @@ project(OpenSubdiv)
 cmake_minimum_required(VERSION 2.8)
 
 #-------------------------------------------------------------------------------
-# Obtain OpenSubdiv API version from version.h file
-if(EXISTS "${CMAKE_SOURCE_DIR}/opensubdiv/version.h")
-    file(STRINGS "${CMAKE_SOURCE_DIR}/opensubdiv/version.h" 
+# Obtain OpenSubdiv API version from common.h file
+if(EXISTS "${CMAKE_SOURCE_DIR}/opensubdiv/common.h")
+    file(STRINGS "${CMAKE_SOURCE_DIR}/opensubdiv/common.h" 
         OpenSubdiv_VERSION REGEX "^#define OPENSUBDIV_VERSION .*$")
     string(REPLACE "#define OPENSUBDIV_VERSION " "" OpenSubdiv_VERSION ${OpenSubdiv_VERSION})
 endif()

@@ -51,7 +51,7 @@
 #ifndef OSD_D3D11L_DRAW_CONTEXT_H
 #define OSD_D3D11L_DRAW_CONTEXT_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/mesh.h"
 #include "../osd/drawContext.h"

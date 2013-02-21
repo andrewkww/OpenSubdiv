@@ -58,7 +58,7 @@
 #ifndef OSD_D3D11_COMPUTE_CONTROLLER_H
 #define OSD_D3D11_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/d3d11ComputeContext.h"
 #include "../osd/d3d11Dispatcher.h"

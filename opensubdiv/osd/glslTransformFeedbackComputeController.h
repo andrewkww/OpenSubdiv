@@ -58,7 +58,7 @@
 #ifndef OSD_GLSL_TRANSFORM_FEEDBACK_COMPUTE_CONTROLLER_H
 #define OSD_GLSL_TRANSFORM_FEEDBACK_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/glslTransformFeedbackComputeContext.h"
 #include "../osd/glslTransformFeedbackDispatcher.h"

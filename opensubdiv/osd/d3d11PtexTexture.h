@@ -57,7 +57,7 @@
 #ifndef OSD_D3D11_PTEX_TEXTURE_H
 #define OSD_D3D11_PTEX_TEXTURE_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/nonCopyable.h"
 

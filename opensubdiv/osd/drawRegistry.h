@@ -52,7 +52,7 @@
 #ifndef OSD_DRAW_REGISTRY_H
 #define OSD_DRAW_REGISTRY_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/drawContext.h"
 

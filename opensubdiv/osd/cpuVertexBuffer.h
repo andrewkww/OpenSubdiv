@@ -57,7 +57,7 @@
 #ifndef OSD_CPU_VERTEX_BUFFER_H
 #define OSD_CPU_VERTEX_BUFFER_H
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

@@ -57,7 +57,7 @@
 #ifndef OSD_CUDA_COMPUTE_CONTEXT_H
 #define OSD_CUDA_COMPUTE_CONTEXT_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/table.h"
 #include "../far/vertexEditTables.h"

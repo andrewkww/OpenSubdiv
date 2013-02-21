@@ -58,7 +58,7 @@
 #ifndef FAR_PTACH_TABLES_H
 #define FAR_PTACH_TABLES_H
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

@@ -68,7 +68,7 @@
     #include <GL/gl.h>
 #endif
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/mesh.h"
 #include "../osd/drawRegistry.h"

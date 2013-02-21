@@ -61,7 +61,7 @@
 #include <cassert>
 #include <vector>
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/catmarkSubdivisionTables.h"
 #include "../far/meshFactory.h"

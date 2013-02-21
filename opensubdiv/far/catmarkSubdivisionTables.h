@@ -58,7 +58,7 @@
 #ifndef FAR_CATMARK_SUBDIVISION_TABLES_H
 #define FAR_CATMARK_SUBDIVISION_TABLES_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/subdivisionTables.h"
 

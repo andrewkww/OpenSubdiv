@@ -59,7 +59,7 @@
 
 #include <dispatch/dispatch.h>
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/vertex.h"
 #include "../far/dispatcher.h"

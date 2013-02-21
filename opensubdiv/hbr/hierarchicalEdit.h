@@ -57,7 +57,7 @@
 #ifndef HBRHIERARCHICALEDIT_H
 #define HBRHIERARCHICALEDIT_H
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

@@ -57,7 +57,7 @@
 #ifndef OSD_CL_COMPUTE_CONTEXT_H
 #define OSD_CL_COMPUTE_CONTEXT_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/table.h"
 #include "../far/vertexEditTables.h"

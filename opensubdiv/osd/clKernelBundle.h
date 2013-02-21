@@ -57,7 +57,7 @@
 #ifndef OSD_CL_KERNEL_BUNDLE_H
 #define OSD_CL_KERNEL_BUNDLE_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/nonCopyable.h"
 

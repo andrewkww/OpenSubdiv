@@ -57,7 +57,7 @@
 #ifndef OSD_CUDA_COMPUTE_CONTROLLER_H
 #define OSD_CUDA_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/cudaComputeContext.h"
 #include "../osd/cudaDispatcher.h"

@@ -63,7 +63,7 @@
 
 #include "../hbr/subdivision.h"
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

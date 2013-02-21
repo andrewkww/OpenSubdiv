@@ -79,7 +79,7 @@
 #include "../hbr/creaseEdit.h"
 #include "../hbr/allocator.h"
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

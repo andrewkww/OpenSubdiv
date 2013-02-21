@@ -57,7 +57,7 @@
 #ifndef OSD_CUDA_D3D11_VERTEX_BUFFER_H
 #define OSD_CUDA_D3D11_VERTEX_BUFFER_H
 
-#include "../version.h"
+#include "../common.h"
 
 struct cudaGraphicsResource;
 

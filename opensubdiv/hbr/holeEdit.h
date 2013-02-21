@@ -57,7 +57,7 @@
 #ifndef HBRHOLEEDIT_H
 #define HBRHOLEEDIT_H
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

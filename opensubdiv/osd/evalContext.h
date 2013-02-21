@@ -57,7 +57,7 @@
 #ifndef OSD_EVAL_CONTEXT_H
 #define OSD_EVAL_CONTEXT_H
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

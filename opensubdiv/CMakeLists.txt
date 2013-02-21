@@ -65,6 +65,6 @@ add_subdirectory(far)
 
 add_subdirectory(osd)
 
-install( FILES version.h
+install( FILES common.h
          DESTINATION include/
          PERMISSIONS OWNER_READ GROUP_READ WORLD_READ )

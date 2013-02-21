@@ -64,7 +64,7 @@
 #include "../hbr/fvarData.h"
 #include "../hbr/face.h"
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

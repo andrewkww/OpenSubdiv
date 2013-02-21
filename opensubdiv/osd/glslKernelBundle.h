@@ -74,7 +74,7 @@
     #include <GL/gl.h>
 #endif
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/computeContext.h"
 #include "../osd/nonCopyable.h"

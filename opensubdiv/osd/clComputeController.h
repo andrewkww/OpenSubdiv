@@ -57,7 +57,7 @@
 #ifndef OSD_CL_COMPUTE_CONTROLLER_H
 #define OSD_CL_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/clComputeContext.h"
 #include "../osd/clDispatcher.h"

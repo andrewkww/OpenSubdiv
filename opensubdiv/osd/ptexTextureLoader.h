@@ -57,7 +57,7 @@
 #ifndef OSD_PTEX_TEXTURE_LOADER_H
 #define OSD_PTEX_TEXTURE_LOADER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include <vector>
 

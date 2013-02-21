@@ -57,7 +57,7 @@
 #ifndef OSD_ERROR_H
 #define OSD_ERROR_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include <stdarg.h>
 

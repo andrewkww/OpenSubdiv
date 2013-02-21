@@ -58,7 +58,7 @@
 #ifndef FAR_PTACH_TABLES_FACTORY_H
 #define FAR_PTACH_TABLES_FACTORY_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/patchTables.h"
 

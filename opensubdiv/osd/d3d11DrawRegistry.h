@@ -51,7 +51,7 @@
 #ifndef OSD_D3D11_DRAW_REGISTRY_H
 #define OSD_D3D11_DRAW_REGISTRY_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/mesh.h"
 #include "../osd/drawRegistry.h"
