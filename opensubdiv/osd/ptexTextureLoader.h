@@ -114,7 +114,7 @@ namespace OPENSUBDIV_VERSION {
 //   * vec3 ( X ) = ( layout.u + X, layout.v + Y, page idx )
 //
 
-class OsdPtexTextureLoader {
+class OSD_API OsdPtexTextureLoader {
 public:
     struct block;
     struct page;
@@ -184,9 +184,15 @@ private:
     unsigned long int _txc,        // texel count for current resolution
                       _txn;        // texel count for native resolution
 
+#ifdef WIN32
+    #pragma warning(disable:4251)
+#endif
     std::vector<block> _blocks;
 
     std::vector<page *> _pages;
+#ifdef WIN32
+    #pragma warning(default:4251)
+#endif
     unsigned short      _pagesize;
 
     unsigned int *  _indexBuffer;

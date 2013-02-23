@@ -100,7 +100,7 @@ namespace OPENSUBDIV_VERSION {
 /// class provides ptex face index lookup table as a texture buffer object that
 /// can be accessed by GLSL shaders.
 ///
-class OsdGLPtexTexture : OsdNonCopyable<OsdGLPtexTexture> {
+class OSD_API OsdGLPtexTexture : OsdNonCopyable<OsdGLPtexTexture> {
 public:
     static OsdGLPtexTexture * Create(PtexTexture * reader,
                                   unsigned long int targetMemory = 0,
