@@ -79,13 +79,13 @@ readLine(unsigned char *line, int length, FILE *fp)
                 c &= 127;
                 int value = getc(fp);
                 while (c--) {
-                    line[x*4+i] = value;
+                    line[x*4+i] = static_cast<char>(value);
                     x++;
                 }
             } else {
                 // non- runlength
                 while (c--) {
-                    line[x*4+i] = getc(fp);
+                    line[x*4+i] = static_cast<char>(getc(fp));
                     x++;
                 }
             }
