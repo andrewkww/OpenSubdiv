@@ -259,13 +259,14 @@ OsdPtexTextureLoader::OsdPtexTextureLoader( PtexTexture * p,
     _txn = 0;
 
     int nf = p->numFaces();
-    _blocks.clear();
+    ClearBlocks();
     _blocks.resize( nf );
 
     for (int i=0; i<nf; ++i) {
         const Ptex::FaceInfo & f = p->getFaceInfo(i);
-        _blocks[i].idx=i;
-        _blocks[i].current=_blocks[i].native=f.res;
+	_blocks[i] = new block();
+        _blocks[i]->idx=i;
+        _blocks[i]->current=_blocks[i]->native=f.res;
         _txn += f.res.u() * f.res.v();
     }
 
@@ -274,6 +275,7 @@ OsdPtexTextureLoader::OsdPtexTextureLoader( PtexTexture * p,
 
 OsdPtexTextureLoader::~OsdPtexTextureLoader() 
 {
+    ClearBlocks();
     ClearPages();
 }
 
@@ -302,9 +304,7 @@ OsdPtexTextureLoader::OptimizeResolution( unsigned long int memrec )
         if (_blocks.size()==0)
             return;
 
-        std::vector<block *> blocks( _blocks.size() );
-        for (unsigned long int i=0; i<blocks.size(); ++i)
-            blocks[i] = &(_blocks[i]);
+        std::vector<block *> blocks = _blocks;
 
         // reducing footprint ----------------------------------------
         if (txrec < _txc) {
@@ -396,10 +396,8 @@ OsdPtexTextureLoader::OptimizePacking( int maxnumpages )
     if (_blocks.size()==0)
         return;
 
-    // generate a vector of pointers to the blocks -------------------
-    std::vector<block *> blocks( _blocks.size() );
-    for (unsigned long int i=0; i<blocks.size(); ++i)
-        blocks[i] = &(_blocks[i]);
+    // make a copy of the blocks -------------------------------------
+    std::vector<block *> blocks = _blocks;
 
     // intro-sort blocks from largest to smallest (helps minimizing waste with
     // greedy packing)
@@ -863,10 +861,10 @@ OsdPtexTextureLoader::GenerateBuffers( )
     float * lptr = _layoutBuffer = new float[ 4 * _blocks.size() ];
     for (unsigned long int i=0; i<_blocks.size(); ++ i) {
         // normalize coordinates by pagesize resolution !
-        *lptr++ = (float) _blocks[i].u / (float) _pagesize;
-        *lptr++ = (float) _blocks[i].v / (float) _pagesize;
-        *lptr++ = (float) _blocks[i].current.u() / (float) _pagesize;
-        *lptr++ = (float) _blocks[i].current.v() / (float) _pagesize;
+        *lptr++ = (float) _blocks[i]->u / (float) _pagesize;
+        *lptr++ = (float) _blocks[i]->v / (float) _pagesize;
+        *lptr++ = (float) _blocks[i]->current.u() / (float) _pagesize;
+        *lptr++ = (float) _blocks[i]->current.v() / (float) _pagesize;
     }
 
     // populate the texels -------------------------------------------
@@ -914,6 +912,13 @@ OsdPtexTextureLoader::EvaluateWaste( ) const
 }
 
 void
+OsdPtexTextureLoader::ClearBlocks( )
+{   for( unsigned long int i=0; i<_blocks.size(); i++ )
+        delete _blocks[i];
+    _blocks.clear();
+}
+
+void
 OsdPtexTextureLoader::ClearPages( )
 {   for( unsigned long int i=0; i<_pages.size(); i++ )
         delete _pages[i];
@@ -923,7 +928,7 @@ OsdPtexTextureLoader::ClearPages( )
 void
 OsdPtexTextureLoader::PrintBlocks() const
 { for( unsigned long int i=0; i<_blocks.size(); ++i )
-    std::cout<<_blocks[i]<<std::endl;
+    std::cout<<*(_blocks[i])<<std::endl;
 }
 
 void

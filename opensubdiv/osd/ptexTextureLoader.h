@@ -163,6 +163,8 @@ public:
 
     float EvaluateWaste( ) const;
 
+    void ClearBlocks( );
+
     void ClearPages( );
 
     void ClearBuffers();
@@ -187,7 +189,7 @@ private:
 #ifdef WIN32
     #pragma warning(disable:4251)
 #endif
-    std::vector<block> _blocks;
+    std::vector<block *> _blocks;
 
     std::vector<page *> _pages;
 #ifdef WIN32
