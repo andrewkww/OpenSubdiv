@@ -138,6 +138,15 @@ private:
     int _primvarWidth;
 };
 
+}
+}
+
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdGLSLTransformFeedbackTable*>;
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdGLSLTransformFeedbackHEditTable*>;
+
+namespace OpenSubdiv {
+namespace OPENSUBDIV_VERSION {
+
 // ----------------------------------------------------------------------------
 
 class OSD_API OsdGLSLTransformFeedbackComputeContext : public OsdComputeContext {

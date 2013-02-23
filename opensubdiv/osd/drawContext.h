@@ -120,6 +120,14 @@ struct OsdPatchArray {
 
 typedef std::vector<OsdPatchArray> OsdPatchArrayVector;
 
+}
+}
+
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdPatchArray>;
+
+namespace OpenSubdiv {
+namespace OPENSUBDIV_VERSION {
+
 ////////////////////////////////////////////////////////////
 
 struct OSD_API OsdDrawContext {
