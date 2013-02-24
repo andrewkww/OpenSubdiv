@@ -62,6 +62,10 @@ set(SHADER_FILES
      shader_gl3.glsl
 )
 
+if(WIN32 AND OSD_LINK_DYNAMIC)
+    add_definitions(-DOSD_DLL)
+endif()
+
 set(PLATFORM_LIBRARIES
     ${OSD_LINK_TARGET}
     ${OPENGL_LIBRARY}

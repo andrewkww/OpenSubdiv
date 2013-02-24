@@ -58,7 +58,7 @@
 #ifndef FAR_VERTEX_EDIT_TABLES_FACTORY_H
 #define FAR_VERTEX_EDIT_TABLES_FACTORY_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../hbr/vertexEdit.h"
 

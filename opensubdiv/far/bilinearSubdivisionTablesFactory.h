@@ -58,7 +58,7 @@
 #ifndef FAR_BILINEAR_SUBDIVISION_TABLES_FACTORY_H
 #define FAR_BILINEAR_SUBDIVISION_TABLES_FACTORY_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/bilinearSubdivisionTables.h"
 #include "../far/meshFactory.h"

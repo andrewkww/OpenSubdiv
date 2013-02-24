@@ -58,7 +58,7 @@
 #ifndef OSD_GL_MESH_H
 #define OSD_GL_MESH_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/mesh.h"
 #include "../osd/glDrawContext.h"

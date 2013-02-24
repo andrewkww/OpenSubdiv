@@ -57,7 +57,7 @@
 #ifndef FAR_DISPATCHER_H
 #define FAR_DISPATCHER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/mesh.h"
 #include "../far/bilinearSubdivisionTables.h"

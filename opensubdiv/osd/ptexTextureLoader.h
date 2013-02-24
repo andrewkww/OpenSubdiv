@@ -57,7 +57,7 @@
 #ifndef OSD_PTEX_TEXTURE_LOADER_H
 #define OSD_PTEX_TEXTURE_LOADER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include <vector>
 
@@ -114,7 +114,7 @@ namespace OPENSUBDIV_VERSION {
 //   * vec3 ( X ) = ( layout.u + X, layout.v + Y, page idx )
 //
 
-class OsdPtexTextureLoader {
+class OSD_API OsdPtexTextureLoader {
 public:
     struct block;
     struct page;
@@ -163,6 +163,8 @@ public:
 
     float EvaluateWaste( ) const;
 
+    void ClearBlocks( );
+
     void ClearPages( );
 
     void ClearBuffers();
@@ -184,9 +186,15 @@ private:
     unsigned long int _txc,        // texel count for current resolution
                       _txn;        // texel count for native resolution
 
-    std::vector<block> _blocks;
+#ifdef WIN32
+    #pragma warning(disable:4251)
+#endif
+    std::vector<block *> _blocks;
 
     std::vector<page *> _pages;
+#ifdef WIN32
+    #pragma warning(default:4251)
+#endif
     unsigned short      _pagesize;
 
     unsigned int *  _indexBuffer;

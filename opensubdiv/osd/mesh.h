@@ -58,7 +58,7 @@
 #ifndef OSD_MESH_H
 #define OSD_MESH_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/mesh.h"
 #include "../far/meshFactory.h"

@@ -56,7 +56,7 @@
 #ifndef FAR_SUBDIVISION_TABLES_FACTORY_H
 #define FAR_SUBDIVISION_TABLES_FACTORY_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/meshFactory.h"
 #include "../far/subdivisionTables.h"

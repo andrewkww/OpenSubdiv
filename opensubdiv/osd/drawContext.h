@@ -58,7 +58,7 @@
 #ifndef OSD_DRAW_CONTEXT_H
 #define OSD_DRAW_CONTEXT_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include <utility>
 #include <string>
@@ -105,7 +105,7 @@ struct OsdPatchDescriptor {
     unsigned char numElements:5; //  0-31
 };
 
-bool operator< (OsdPatchDescriptor const & a,
+bool OSD_API operator< (OsdPatchDescriptor const & a,
                 OsdPatchDescriptor const & b);
 
 
@@ -120,9 +120,17 @@ struct OsdPatchArray {
 
 typedef std::vector<OsdPatchArray> OsdPatchArrayVector;
 
+}
+}
+
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdPatchArray>;
+
+namespace OpenSubdiv {
+namespace OPENSUBDIV_VERSION {
+
 ////////////////////////////////////////////////////////////
 
-struct OsdDrawContext {
+struct OSD_API OsdDrawContext {
     OsdDrawContext() : isAdaptive(false) {}
     virtual ~OsdDrawContext();
 

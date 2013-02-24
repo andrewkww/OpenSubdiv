@@ -57,7 +57,7 @@
 #ifndef OSD_CPU_COMPUTE_CONTEXT_H
 #define OSD_CPU_COMPUTE_CONTEXT_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/table.h"
 #include "../far/subdivisionTables.h"
@@ -70,7 +70,7 @@ namespace OPENSUBDIV_VERSION {
 
 struct OsdVertexDescriptor;
 
-class OsdCpuComputeContext : public OsdComputeContext {
+class OSD_API OsdCpuComputeContext : public OsdComputeContext {
 public:
     static OsdCpuComputeContext * Create(FarMesh<OsdVertex> *farmesh);
 

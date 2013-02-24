@@ -60,9 +60,9 @@ project(OpenSubdiv)
 cmake_minimum_required(VERSION 2.8)
 
 #-------------------------------------------------------------------------------
-# Obtain OpenSubdiv API version from version.h file
-if(EXISTS "${CMAKE_SOURCE_DIR}/opensubdiv/version.h")
-    file(STRINGS "${CMAKE_SOURCE_DIR}/opensubdiv/version.h" 
+# Obtain OpenSubdiv API version from common.h file
+if(EXISTS "${CMAKE_SOURCE_DIR}/opensubdiv/common.h")
+    file(STRINGS "${CMAKE_SOURCE_DIR}/opensubdiv/common.h" 
         OpenSubdiv_VERSION REGEX "^#define OPENSUBDIV_VERSION .*$")
     string(REPLACE "#define OPENSUBDIV_VERSION " "" OpenSubdiv_VERSION ${OpenSubdiv_VERSION})
 endif()
@@ -83,15 +83,22 @@ if(LIBRARY_OUTPUT_PATH_ROOT)
          ${LIBRARY_OUTPUT_PATH_ROOT}/ )
 endif()
 
-# Set the directory where the executables will be stored.
-set(EXECUTABLE_OUTPUT_PATH
+# Set the directory where the runtime files will be stored.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
     ${PROJECT_BINARY_DIR}/bin
     CACHE PATH
-    "Directory where executables will be stored"
+    "Directory where runtime files will be stored"
+)
+
+# Set the directory where the archives will be stored.
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+    ${PROJECT_BINARY_DIR}/lib
+    CACHE PATH
+    "Directory where archives will be stored"
 )
 
 # Set the directory where the libraries will be stored.
-set(LIBRARY_OUTPUT_PATH
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
     ${PROJECT_BINARY_DIR}/lib
     CACHE PATH
     "Directory where all libraries will be stored"
@@ -406,16 +413,9 @@ endif()
 
 # Link examples & regressions dynamically against Osd
 set( OSD_LINK_TARGET osd_dynamic_cpu osd_dynamic_gpu )
+set( OSD_LINK_DYNAMIC 1 )
 
 if (WIN32)
-    add_definitions(
-        # Link against the static version of GLEW.
-        -DGLEW_STATIC
-    )
-    # Link examples & regressions statically against Osd for
-    # Windows until all the kinks can be worked out.
-    set( OSD_LINK_TARGET osd_static_cpu osd_static_gpu )
-
     if (DXSDK_FOUND)
         add_definitions(
             -DOPENSUBDIV_HAS_DX11SDK

@@ -58,7 +58,7 @@
 #ifndef OSD_CPU_GL_VERTEX_BUFFER_H
 #define OSD_CPU_GL_VERTEX_BUFFER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #if defined(__APPLE__)
     #include "TargetConditionals.h"
@@ -84,7 +84,7 @@ namespace OPENSUBDIV_VERSION {
 /// OsdGLVertexBufferInterface.
 /// The buffer interop between Cpu and GL is handled
 /// automatically when a client calls BindCpuBuffer and BindVBO methods.
-class OsdCpuGLVertexBuffer {
+class OSD_API OsdCpuGLVertexBuffer {
 public:
     /// Creator. Returns NULL if error.
     static OsdCpuGLVertexBuffer * Create(int numElements, int numVertices);

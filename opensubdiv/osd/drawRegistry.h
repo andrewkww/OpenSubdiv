@@ -52,7 +52,7 @@
 #ifndef OSD_DRAW_REGISTRY_H
 #define OSD_DRAW_REGISTRY_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/drawContext.h"
 
@@ -80,12 +80,12 @@ struct OsdDrawShaderSource {
     DefineVector defines;
 };
 
-struct OsdDrawConfig {
+struct OSD_API OsdDrawConfig {
     virtual ~OsdDrawConfig();
     // any base class behaviors?
 };
 
-struct OsdDrawSourceConfig {
+struct OSD_API OsdDrawSourceConfig {
     virtual ~OsdDrawSourceConfig();
     // any base class behaviors?
 };

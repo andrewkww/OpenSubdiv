@@ -83,6 +83,10 @@ include_directories(
     ${PTEX_INCLUDE_DIR}
 )
 
+if(WIN32 AND OSD_LINK_DYNAMIC)
+    add_definitions(-DOSD_DLL)
+endif()
+
 #-------------------------------------------------------------------------------
 # Shader Stringification
 # We want to use preprocessor include directives to include GLSL and OpenCL

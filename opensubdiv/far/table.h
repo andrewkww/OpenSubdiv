@@ -58,7 +58,7 @@
 #ifndef FAR_TABLE_H
 #define FAR_TABLE_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include <vector>
 #include <cassert>

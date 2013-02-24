@@ -57,7 +57,7 @@
 #ifndef OSD_GCD_COMPUTE_CONTROLLER_H
 #define OSD_GCD_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/cpuComputeContext.h"
 #include "../osd/gcdDispatcher.h"

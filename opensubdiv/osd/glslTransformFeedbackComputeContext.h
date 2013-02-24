@@ -74,7 +74,7 @@
     #include <GL/gl.h>
 #endif
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/table.h"
 #include "../far/vertexEditTables.h"
@@ -138,9 +138,18 @@ private:
     int _primvarWidth;
 };
 
+}
+}
+
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdGLSLTransformFeedbackTable*>;
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdGLSLTransformFeedbackHEditTable*>;
+
+namespace OpenSubdiv {
+namespace OPENSUBDIV_VERSION {
+
 // ----------------------------------------------------------------------------
 
-class OsdGLSLTransformFeedbackComputeContext : public OsdComputeContext {
+class OSD_API OsdGLSLTransformFeedbackComputeContext : public OsdComputeContext {
 public:
     static OsdGLSLTransformFeedbackComputeContext * Create(FarMesh<OsdVertex> *farmesh);
 

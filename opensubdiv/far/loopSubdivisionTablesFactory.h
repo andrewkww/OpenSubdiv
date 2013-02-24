@@ -58,7 +58,7 @@
 #ifndef FAR_LOOP_SUBDIVISION_TABLES_FACTORY_H
 #define FAR_LOOP_SUBDIVISION_TABLES_FACTORY_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/loopSubdivisionTables.h"
 #include "../far/meshFactory.h"

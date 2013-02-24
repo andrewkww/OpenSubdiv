@@ -57,7 +57,7 @@
 #ifndef OSD_GLSL_COMPUTE_DISPATCHER_H
 #define OSD_GLSL_COMPUTE_DISPATCHER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/vertex.h"
 #include "../far/dispatcher.h"
@@ -67,7 +67,7 @@ namespace OPENSUBDIV_VERSION {
 
 class OsdGLSLComputeContext;
 
-class OsdGLSLComputeKernelDispatcher
+class OSD_API OsdGLSLComputeKernelDispatcher
     : public FarDispatcher<OsdVertex> {
 
 public:

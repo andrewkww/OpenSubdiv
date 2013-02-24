@@ -57,7 +57,7 @@
 #ifndef OSD_CPU_COMPUTE_CONTROLLER_H
 #define OSD_CPU_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/cpuComputeContext.h"
 #include "../osd/cpuDispatcher.h"
@@ -69,7 +69,7 @@ namespace OPENSUBDIV_VERSION {
 /// OsdCpuComputeController is a compute controller class to launch
 /// single threaded CPU subdivision kernels. It requires
 /// OsdCpuVertexBufferInterface as arguments of Refine function.
-class OsdCpuComputeController {
+class OSD_API OsdCpuComputeController {
 public:
     typedef OsdCpuComputeContext ComputeContext;
 

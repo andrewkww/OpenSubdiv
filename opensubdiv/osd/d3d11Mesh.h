@@ -58,7 +58,7 @@
 #ifndef OSD_D3D11MESH_H
 #define OSD_D3D11MESH_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/mesh.h"
 #include "../osd/d3d11ComputeController.h"

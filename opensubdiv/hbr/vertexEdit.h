@@ -60,7 +60,7 @@
 #include <algorithm>
 #include "../hbr/hierarchicalEdit.h"
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

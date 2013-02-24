@@ -55,9 +55,29 @@
 //     a particular purpose and non-infringement.
 //
 
-#ifndef OPENSUBDIV_VERSION_H
-#define OPENSUBDIV_VERSION_H
+#ifndef OPENSUBDIV_COMMON_H
+#define OPENSUBDIV_COMMON_H
 
 #define OPENSUBDIV_VERSION RELEASE_CANDIDATE_1_0
 
-#endif /* OPENSUBDIV_VERSION_H */
+#ifdef WIN32
+    #ifdef OSD_DLL
+        #ifdef OSD_INTERNAL
+            #define OSD_API __declspec(dllexport)
+            #define OSD_TEMPLATE
+        #else
+            #define OSD_API __declspec(dllimport)
+            #define OSD_TEMPLATE extern
+        #endif
+    #endif
+#endif
+
+#ifndef OSD_API
+    #define OSD_API
+#endif
+
+#ifndef OSD_TEMPLATE
+    #define OSD_TEMPLATE
+#endif
+
+#endif /* OPENSUBDIV_COMMON_H */

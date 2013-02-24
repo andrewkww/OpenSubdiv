@@ -57,7 +57,7 @@
 #ifndef HBRALLOCATOR_H
 #define HBRALLOCATOR_H
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

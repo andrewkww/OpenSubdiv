@@ -73,7 +73,7 @@
     #include <GL/gl.h>
 #endif
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/table.h"
 #include "../far/vertexEditTables.h"
@@ -137,9 +137,18 @@ private:
     int _primvarWidth;
 };
 
+}
+}
+
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdGLSLComputeTable*>;
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdGLSLComputeHEditTable*>;
+
+namespace OpenSubdiv {
+namespace OPENSUBDIV_VERSION {
+
 // ----------------------------------------------------------------------------
 
-class OsdGLSLComputeContext : public OsdComputeContext {
+class OSD_API OsdGLSLComputeContext : public OsdComputeContext {
 public:
     static OsdGLSLComputeContext * Create(FarMesh<OsdVertex> *farmesh);
 

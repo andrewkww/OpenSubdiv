@@ -60,7 +60,7 @@
 #include <cstring>
 #include <cmath>
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

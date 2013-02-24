@@ -57,7 +57,7 @@
 #ifndef OSD_OMP_DISPATCHER_H
 #define OSD_OMP_DISPATCHER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/vertex.h"
 #include "../far/dispatcher.h"
@@ -67,7 +67,7 @@ namespace OPENSUBDIV_VERSION {
 
 class OsdCpuComputeContext;
 
-class OsdOmpKernelDispatcher : public FarDispatcher<OsdVertex>
+class OSD_API OsdOmpKernelDispatcher : public FarDispatcher<OsdVertex>
 {
 public:
     OsdOmpKernelDispatcher();

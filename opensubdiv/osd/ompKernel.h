@@ -57,7 +57,7 @@
 #ifndef OSD_OMP_KERNEL_H
 #define OSD_OMP_KERNEL_H
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {

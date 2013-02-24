@@ -603,7 +603,7 @@ editVertexAdd(float *fVertex, int numVertexElements, int primVarOffset, int prim
 
 // --------------------------------------------------------------------------------------------
 
-#include "../version.h"
+#include "../common.h"
 
 // XXX: this macro usage is tentative. Since cuda kernel can't be dynamically configured,
 // still trying to find better way to have optimized kernel..

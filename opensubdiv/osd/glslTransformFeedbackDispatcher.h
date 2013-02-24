@@ -57,7 +57,7 @@
 #ifndef OSD_GLSL_TRANSFORM_FEEDBACK_DISPATCHER_H
 #define OSD_GLSL_TRANSFORM_FEEDBACK_DISPATCHER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/vertex.h"
 #include "../far/dispatcher.h"
@@ -67,7 +67,7 @@ namespace OPENSUBDIV_VERSION {
 
 class OsdGLSLTransformFeedbackComputeContext;
 
-class OsdGLSLTransformFeedbackKernelDispatcher
+class OSD_API OsdGLSLTransformFeedbackKernelDispatcher
     : public FarDispatcher<OsdVertex> {
 
 public:

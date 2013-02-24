@@ -73,7 +73,7 @@
     #include <GL/gl.h>
 #endif
 
-#include "../version.h"
+#include "../common.h"
 
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {
@@ -82,7 +82,7 @@ namespace OPENSUBDIV_VERSION {
 /// OsdGLVertexBuffer implements OsdGLVertexBufferInterface. An instance
 /// of this buffer class can be passed to OsdGLComputeController
 /// and OsdGLDrawController
-class OsdGLVertexBuffer {
+class OSD_API OsdGLVertexBuffer {
 public:
     /// Creator. Returns NULL if error.
     static OsdGLVertexBuffer * Create(int numElements, int numVertices);

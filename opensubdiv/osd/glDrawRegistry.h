@@ -68,7 +68,7 @@
     #include <GL/gl.h>
 #endif
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/mesh.h"
 #include "../osd/drawRegistry.h"
@@ -79,7 +79,7 @@
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {
 
-struct OsdGLDrawConfig : public OsdDrawConfig {
+struct OSD_API OsdGLDrawConfig : public OsdDrawConfig {
     OsdGLDrawConfig() : program(0) {}
     virtual ~OsdGLDrawConfig();
 
@@ -97,7 +97,7 @@ struct OsdGLDrawSourceConfig : public OsdDrawSourceConfig {
 
 ////////////////////////////////////////////////////////////
 
-class OsdGLDrawRegistryBase {
+class OSD_API OsdGLDrawRegistryBase {
 public:
     typedef OsdPatchDescriptor DescType;
     typedef OsdGLDrawConfig ConfigType;

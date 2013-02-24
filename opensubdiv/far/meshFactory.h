@@ -58,7 +58,7 @@
 #ifndef FAR_MESH_FACTORY_H
 #define FAR_MESH_FACTORY_H
 
-#include "../version.h"
+#include "../common.h"
 
 // Activate Hbr feature adaptive tagging : in order to process the HbrMesh 
 // adaptively, some tag data is added to HbrFace, HbrVertex and HbrHalfedge.

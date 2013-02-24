@@ -58,7 +58,7 @@
 #ifndef FAR_MESH_H
 #define FAR_MESH_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/subdivisionTables.h"
 #include "../far/patchTables.h"

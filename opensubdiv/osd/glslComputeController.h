@@ -58,7 +58,7 @@
 #ifndef OSD_GLSL_COMPUTE_CONTROLLER_H
 #define OSD_GLSL_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/glslComputeContext.h"
 #include "../osd/glslDispatcher.h"
@@ -70,12 +70,20 @@ namespace OPENSUBDIV_VERSION {
 
 class OsdGLSLComputeKernelBundle;
 
+}
+}
+
+template class OSD_API std::vector<OpenSubdiv::OPENSUBDIV_VERSION::OsdGLSLComputeKernelBundle*>;
+
+namespace OpenSubdiv {
+namespace OPENSUBDIV_VERSION {
+
 /// \brief Compute controller for launching GLSLCompute transform feedback
 /// subdivision kernels.
 /// OsdGLSLComputeController is a compute controller class to launch
 /// GLSLCompute transfrom feedback subdivision kernels. It requires
 /// OsdGLVertexBufferInterface as arguments of Refine function.
-class OsdGLSLComputeController {
+class OSD_API OsdGLSLComputeController {
 public:
     typedef OsdGLSLComputeContext ComputeContext;
 

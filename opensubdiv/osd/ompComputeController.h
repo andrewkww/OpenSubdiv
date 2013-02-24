@@ -57,7 +57,7 @@
 #ifndef OSD_OMP_COMPUTE_CONTROLLER_H
 #define OSD_OMP_COMPUTE_CONTROLLER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../osd/cpuComputeContext.h"
 #include "../osd/ompDispatcher.h"
@@ -73,7 +73,7 @@ namespace OPENSUBDIV_VERSION {
 /// OsdOmpComputeController is a compute controller class to launch
 /// OpenMP threaded subdivision kernels. It requires OsdCpuVertexBufferInterface
 /// as arguments of Refine function.
-class OsdOmpComputeController {
+class OSD_API OsdOmpComputeController {
 public:
     typedef OsdCpuComputeContext ComputeContext;
 

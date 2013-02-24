@@ -67,7 +67,7 @@
     #include <GL/gl.h>
 #endif
 
-#include "../version.h"
+#include "../common.h"
 
 #include "../far/mesh.h"
 #include "../osd/drawContext.h"
@@ -79,7 +79,7 @@
 namespace OpenSubdiv {
 namespace OPENSUBDIV_VERSION {
 
-class OsdGLDrawContext : public OsdDrawContext {
+class OSD_API OsdGLDrawContext : public OsdDrawContext {
 public:
     typedef GLuint VertexBufferBinding;
 

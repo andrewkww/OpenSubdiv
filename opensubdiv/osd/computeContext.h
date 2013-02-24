@@ -57,6 +57,8 @@
 #ifndef OSD_COMPUTE_CONTEXT_H
 #define OSD_COMPUTE_CONTEXT_H
 
+#include "../common.h"
+
 #include "../osd/vertex.h"
 #include "../osd/nonCopyable.h"
 
@@ -76,7 +78,7 @@ template <class T> class FarMesh;
             F_ITa,
             TABLE_MAX }; }
 
-class OsdComputeContext : OsdNonCopyable<OsdComputeContext> {
+class OSD_API OsdComputeContext : OsdNonCopyable<OsdComputeContext> {
 public:
     virtual ~OsdComputeContext() {}
 

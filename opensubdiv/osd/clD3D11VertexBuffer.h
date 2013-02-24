@@ -57,7 +57,7 @@
 #ifndef OSD_CL_D3D11_VERTEX_BUFFER_H
 #define OSD_CL_D3D11_VERTEX_BUFFER_H
 
-#include "../version.h"
+#include "../common.h"
 
 #if defined(__APPLE__)
     #include <OpenCL/opencl.h>
