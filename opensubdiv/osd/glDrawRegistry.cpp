@@ -110,7 +110,7 @@ OsdGLDrawRegistryBase::_CreateDrawSourceConfig(OsdDrawContext::PatchDescriptor c
     OsdGLDrawSourceConfig * sconfig = _NewDrawSourceConfig();
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    if (GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
     {
         sconfig->commonShader.source = commonShaderSource;
         {
@@ -313,7 +313,7 @@ OsdGLDrawRegistryBase::_CreateDrawConfig(
     GLuint tessEvalShader = 0;
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    if (GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
     {
         tessControlShader =
             sconfig->tessControlShader.source.empty() ? 0 :
@@ -330,7 +330,7 @@ OsdGLDrawRegistryBase::_CreateDrawConfig(
     GLuint geometryShader = 0;
 
 #if defined(GL_ARB_geometry_shader4) || defined(GL_VERSION_3_1)
-    if (GLEW_ARB_geometry_shader4 || GLEW_VERSION_3_1)
+    if (GLEW_ARB_geometry_shader4 && GLEW_VERSION_3_1)
     {
         geometryShader =
             sconfig->geometryShader.source.empty() ? 0 :
