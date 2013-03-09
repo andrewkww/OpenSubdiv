@@ -79,12 +79,14 @@ vec4 GeneratePatchCoord(vec2 localUV)  // for non-adpative
 vec4 PTexLookup(vec4 patchCoord,
                 sampler2DArray data,
                 samplerBuffer packings,
-                isamplerBuffer pages)
+                isamplerBuffer pages,
+                int mipmaps)
 {
+    int mipmap = 0;
     vec2 uv = patchCoord.xy;
     int faceID = int(patchCoord.w);
-    int page = texelFetch(pages, faceID).x;
-    vec4 packing = texelFetch(packings, faceID);
+    int page = texelFetch(pages, faceID * mipmaps + mipmap).x;
+    vec4 packing = texelFetch(packings, faceID * mipmaps + mipmap);
     vec3 coords = vec3( packing.x + uv.x * packing.z,
                         packing.y + uv.y * packing.w,
                         page);
@@ -103,13 +105,15 @@ vec4 PTexLookup(vec4 patchCoord,
 uniform sampler2DArray textureDisplace_Data;
 uniform samplerBuffer textureDisplace_Packing;
 uniform isamplerBuffer textureDisplace_Pages;
+uniform int textureDisplace_Mipmaps;
 
 vec4 displacement(vec4 position, vec3 normal, vec4 patchCoord)
 {
     float disp = PTexLookup(patchCoord,
                             textureDisplace_Data,
                             textureDisplace_Packing,
-                            textureDisplace_Pages).x;
+                            textureDisplace_Pages,
+                            textureDisplace_Mipmaps).x;
     return position + vec4(disp * normal, 0) * displacementScale;
 }
 #endif
@@ -356,18 +360,21 @@ uniform int ptexFaceOffset;
 uniform sampler2DArray textureImage_Data;
 uniform samplerBuffer textureImage_Packing;
 uniform isamplerBuffer textureImage_Pages;
+uniform int textureImage_Mipmaps;
 #endif
 
 #ifdef USE_PTEX_OCCLUSION
 uniform sampler2DArray textureOcclusion_Data;
 uniform samplerBuffer textureOcclusion_Packing;
 uniform isamplerBuffer textureOcclusion_Pages;
+uniform int textureOcclusion_Mipmaps;
 #endif
 
 #ifdef USE_PTEX_SPECULAR
 uniform sampler2DArray textureSpecular_Data;
 uniform samplerBuffer textureSpecular_Packing;
 uniform isamplerBuffer textureSpecular_Pages;
+uniform int textureSpecular_Mipmaps;
 #endif
 
 #define NUM_LIGHTS 2
@@ -390,6 +397,7 @@ uniform vec4 overrideColor;
 uniform sampler2DArray textureDisplace_Data;
 uniform samplerBuffer textureDisplace_Packing;
 uniform isamplerBuffer textureDisplace_Pages;
+uniform int textureDisplace_Mipmaps;
 
 vec3
 perturbNormalFromDisplacement(vec3 position, vec3 normal, vec4 patchCoord)
@@ -419,9 +427,9 @@ perturbNormalFromDisplacement(vec3 position, vec3 normal, vec4 patchCoord)
     vec4 STll = patchCoord;
     vec4 STlr = patchCoord + d * vec4(texDx.x, texDx.y, 0, 0);
     vec4 STul = patchCoord + d * vec4(texDy.x, texDy.y, 0, 0);
-    float Hll = PTexLookup(STll, textureDisplace_Data, textureDisplace_Packing, textureDisplace_Pages).x * bumpScale;
-    float Hlr = PTexLookup(STlr, textureDisplace_Data, textureDisplace_Packing, textureDisplace_Pages).x * bumpScale;
-    float Hul = PTexLookup(STul, textureDisplace_Data, textureDisplace_Packing, textureDisplace_Pages).x * bumpScale;
+    float Hll = PTexLookup(STll, textureDisplace_Data, textureDisplace_Packing, textureDisplace_Pages, textureDisplace_Mipmaps).x * bumpScale;
+    float Hlr = PTexLookup(STlr, textureDisplace_Data, textureDisplace_Packing, textureDisplace_Pages, textureDisplace_Mipmaps).x * bumpScale;
+    float Hul = PTexLookup(STul, textureDisplace_Data, textureDisplace_Packing, textureDisplace_Pages, textureDisplace_Mipmaps).x * bumpScale;
     float dBs = (Hlr - Hll)/d;
     float dBt = (Hul - Hll)/d;
 #endif
@@ -452,7 +460,8 @@ lighting(vec4 texColor, vec3 Peye, vec3 Neye)
     float occ = PTexLookup(input.v.patchCoord,
                            textureOcclusion_Data,
                            textureOcclusion_Packing,
-                           textureOcclusion_Pages).x;
+                           textureOcclusion_Pages,
+                           textureOcclusion_Mipmaps).x;
 #else
     float occ = 0.0;
 #endif
@@ -513,7 +522,8 @@ main()
     vec4 texColor = PTexLookup(input.v.patchCoord,
                                textureImage_Data,
                                textureImage_Packing,
-                               textureImage_Pages);
+                               textureImage_Pages,
+                               textureImage_Mipmaps);
 //    texColor = vec4(pow(texColor.xyz, vec3(0.4545)), 1);
 #else
     vec4 texColor = vec4(1);
@@ -539,7 +549,8 @@ main()
     float occ = PTexLookup(input.v.patchCoord,
                            textureOcclusion_Data,
                            textureOcclusion_Packing,
-                           textureOcclusion_Pages).x;
+                           textureOcclusion_Pages,
+                           textureOcclusion_Mipmaps).x;
 #else
     float occ = 0.0;
 #endif
@@ -548,7 +559,8 @@ main()
     float specular = PTexLookup(input.v.patchCoord,
                                 textureSpecular_Data,
                                 textureSpecular_Packing,
-                                textureSpecular_Pages).x;
+                                textureSpecular_Pages,
+                                textureSpecular_Mipmaps).x;
 #else
     float specular = 1.0;
 #endif
