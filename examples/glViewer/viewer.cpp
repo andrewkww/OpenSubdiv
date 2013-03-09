@@ -280,13 +280,43 @@ checkGLErrors(std::string const & where = "")
 }
 
 //------------------------------------------------------------------------------
-static GLuint
-compileShader(GLenum shaderType, const char *source)
+static GLuint compileShader(GLenum shaderType,
+                            OpenSubdiv::OsdDrawShaderSource const & common,
+                            OpenSubdiv::OsdDrawShaderSource const & source)
 {
+    const char *sources[4];
+    std::stringstream definitions;
+    for (int i=0; i<(int)common.defines.size(); ++i) {
+        definitions << "#define "
+                    << common.defines[i].first << " "
+                    << common.defines[i].second << "\n";
+    }
+    for (int i=0; i<(int)source.defines.size(); ++i) {
+        definitions << "#define "
+                    << source.defines[i].first << " "
+                    << source.defines[i].second << "\n";
+    }
+    std::string defString = definitions.str();
+
+    sources[0] = source.version.c_str();
+    sources[1] = defString.c_str();
+    sources[2] = common.source.c_str();
+    sources[3] = source.source.c_str();
+
     GLuint shader = glCreateShader(shaderType);
-    glShaderSource(shader, 1, &source, NULL);
+    glShaderSource(shader, 4, sources, NULL);
     glCompileShader(shader);
-    checkGLErrors("compileShader");
+
+    GLint status;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    if( status == GL_FALSE ) {
+        GLchar emsg[40960];
+        glGetShaderInfoLog(shader, sizeof(emsg), 0, emsg);
+        fprintf(stderr, "Error compiling GLSL shader: %s\n", emsg );
+        fprintf(stderr, "Defines: %s\n", defString.c_str());
+        return 0;
+    }
+
     return shader;
 }
 
@@ -298,9 +328,8 @@ linkDefaultProgram()
 #else
     #define GLSL_VERSION_DEFINE "#version 150\n"
 #endif
-    
+
     static const char *vsSrc =
-        GLSL_VERSION_DEFINE
         "in vec3 position;\n"
         "in vec3 color;\n"
         "out vec4 fragColor;\n"
@@ -312,7 +341,6 @@ linkDefaultProgram()
         "}\n";
 
     static const char *fsSrc =
-        GLSL_VERSION_DEFINE
         "in vec4 fragColor;\n"
         "out vec4 color;\n"
         "void main() {\n"
@@ -320,11 +348,17 @@ linkDefaultProgram()
         "}\n";
 
     GLuint program = glCreateProgram();
-    GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vsSrc);
-    GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fsSrc);
 
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
+    OpenSubdiv::OsdDrawShaderSource common, vertexShader, fragmentShader;
+    vertexShader.source = vsSrc;
+    vertexShader.version = glslVersion;
+    fragmentShader.source = fsSrc;
+    fragmentShader.version = glslVersion;
+    GLuint vs = compileShader(GL_VERTEX_SHADER, common, vertexShader);
+    GLuint fs = compileShader(GL_FRAGMENT_SHADER, common, fragmentShader);
+
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
 
     glLinkProgram(program);
 
