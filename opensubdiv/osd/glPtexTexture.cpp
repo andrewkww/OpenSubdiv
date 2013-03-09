@@ -132,7 +132,7 @@ OsdGLPtexTexture::Create(PtexTexture * reader,
         return result;
 
     // Setup GPU memory
-    unsigned long int nfaces = ldr.GetNumBlocks();
+    unsigned long int nfaces = ldr.GetNumFaces() * ldr.GetMipmaps();
 
     GLuint pages = genTextureBuffer(GL_R32I,
                                     nfaces * sizeof(GLint),
@@ -197,6 +197,8 @@ OsdGLPtexTexture::Create(PtexTexture * reader,
     result->_pages = pages;
     result->_layout = layout;
     result->_texels = texels;
+
+    result->_mipmaps = ldr.GetMipmaps();
 
     return result;
 }

@@ -118,6 +118,8 @@ public:
     /// Returns the texels texture array.
     GLuint GetTexelsTexture() const { return _texels; }
 
+    GLint GetMipmaps() const { return _mipmaps; }
+
     ~OsdGLPtexTexture();
 
 private:
@@ -132,6 +134,8 @@ private:
     GLuint _pages,    // per-face page indices into the texel array
            _layout,   // per-face lookup table (vec4 : top-left corner & width / height)
            _texels;   // texel data
+
+    GLint _mipmaps;  // number of mipmaps
 };
 
 }  // end namespace OPENSUBDIV_VERSION
