@@ -973,7 +973,7 @@ EffectDrawRegistry::_CreateDrawSourceConfig(DescType const & desc)
 
     const char *glslVersion;
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    if (GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
     {
         glslVersion = "#version 400\n";
     }
@@ -996,7 +996,7 @@ EffectDrawRegistry::_CreateDrawSourceConfig(DescType const & desc)
     }
     assert(sconfig);
 
-    if (GLEW_ARB_tessellation_shader || GL_VERSION_4_0)
+    if (GLEW_ARB_tessellation_shader && GL_VERSION_4_0)
     {
         sconfig->geometryShader.source = shaderSource;
     } else {
@@ -1005,7 +1005,7 @@ EffectDrawRegistry::_CreateDrawSourceConfig(DescType const & desc)
     sconfig->geometryShader.version = glslVersion;
     sconfig->geometryShader.AddDefine("GEOMETRY_SHADER");
 
-    if (GLEW_ARB_tessellation_shader || GL_VERSION_4_0)
+    if (GLEW_ARB_tessellation_shader && GL_VERSION_4_0)
     {
         sconfig->fragmentShader.source = shaderSource;
     } else {
@@ -1088,7 +1088,7 @@ EffectDrawRegistry::_CreateDrawConfig(
 
     GLint loc;
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-    if(GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+    if(GLEW_ARB_separate_shader_objects && GLEW_VERSION_4_1)
     {
         if ((loc = glGetUniformLocation(config->program, "g_VertexBuffer")) != -1) {
             glProgramUniform1i(config->program, loc, 0); // GL_TEXTURE0
@@ -1319,7 +1319,7 @@ display() {
             break;
         default:
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-            if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+            if (GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
             {
                 primType = GL_PATCHES;
                 glPatchParameteri(GL_PATCH_VERTICES, desc.GetNumControlVertices());
@@ -1332,7 +1332,7 @@ display() {
         }
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-        if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+        if (GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
         {
             GLuint program = bindProgram(GetEffect(), patch);
 
