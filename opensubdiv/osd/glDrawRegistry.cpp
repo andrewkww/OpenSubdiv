@@ -110,135 +110,138 @@ OsdGLDrawRegistryBase::_CreateDrawSourceConfig(OsdDrawContext::PatchDescriptor c
     OsdGLDrawSourceConfig * sconfig = _NewDrawSourceConfig();
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    sconfig->commonShader.source = commonShaderSource;
+    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
     {
-        std::ostringstream ss;
-        ss << (int)desc.GetMaxValence();
-        sconfig->commonShader.AddDefine("OSD_MAX_VALENCE", ss.str());
-        ss.str("");
-        ss << (int)desc.GetNumElements();
-        sconfig->commonShader.AddDefine("OSD_NUM_ELEMENTS", ss.str());
-    }
-
-    if (desc.GetPattern() == FarPatchTables::NON_TRANSITION) {
-        switch (desc.GetType()) {
-        case FarPatchTables::QUADS:
-        case FarPatchTables::TRIANGLES:
-            sconfig->vertexShader.source = regularShaderSource;
-            sconfig->vertexShader.version = "#version 410\n";
-            sconfig->vertexShader.AddDefine("VERTEX_SHADER");
-            sconfig->fragmentShader.source = regularShaderSource;
-            sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
-            sconfig->fragmentShader.version = "#version 410\n";
-            break;
-        case FarPatchTables::REGULAR:
-            sconfig->vertexShader.source = regularShaderSource;
-            sconfig->vertexShader.version = "#version 410\n";
-            sconfig->vertexShader.AddDefine("PATCH_VERTEX_SHADER");
-            sconfig->tessControlShader.source = regularShaderSource;
-            sconfig->tessControlShader.version = "#version 410\n";
-            sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_REGULAR_SHADER");
-            sconfig->tessEvalShader.source = regularShaderSource;
-            sconfig->tessEvalShader.version = "#version 410\n";
-            sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_REGULAR_SHADER");
-            sconfig->fragmentShader.source = regularShaderSource;
-            sconfig->fragmentShader.version = "#version 410\n";
-            sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
-            break;
-        case FarPatchTables::BOUNDARY:
-            sconfig->vertexShader.source = boundaryShaderSource;
-            sconfig->vertexShader.version = "#version 410\n";
-            sconfig->vertexShader.AddDefine("PATCH_VERTEX_SHADER");
-            sconfig->tessControlShader.source = boundaryShaderSource;
-            sconfig->tessControlShader.version = "#version 410\n";
-            sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_BOUNDARY_SHADER");
-            sconfig->tessEvalShader.source = boundaryShaderSource;
-            sconfig->tessEvalShader.version = "#version 410\n";
-            sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_BOUNDARY_SHADER");
-            sconfig->fragmentShader.source = boundaryShaderSource;
-            sconfig->fragmentShader.version = "#version 410\n";
-            sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
-            break;
-        case FarPatchTables::CORNER:
-            sconfig->vertexShader.source = cornerShaderSource;
-            sconfig->vertexShader.version = "#version 410\n";
-            sconfig->vertexShader.AddDefine("PATCH_VERTEX_SHADER");
-            sconfig->tessControlShader.source = cornerShaderSource;
-            sconfig->tessControlShader.version = "#version 410\n";
-            sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_CORNER_SHADER");
-            sconfig->tessEvalShader.source = cornerShaderSource;
-            sconfig->tessEvalShader.version = "#version 410\n";
-            sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_CORNER_SHADER");
-            sconfig->fragmentShader.source = cornerShaderSource;
-            sconfig->fragmentShader.version = "#version 410\n";
-            sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
-            break;
-        case FarPatchTables::GREGORY:
-            sconfig->vertexShader.source = gregoryShaderSource;
-            sconfig->vertexShader.version = "#version 410\n";
-            sconfig->vertexShader.AddDefine("PATCH_VERTEX_GREGORY_SHADER");
-            sconfig->tessControlShader.source = gregoryShaderSource;
-            sconfig->tessControlShader.version = "#version 410\n";
-            sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_GREGORY_SHADER");
-            sconfig->tessEvalShader.source = gregoryShaderSource;
-            sconfig->tessEvalShader.version = "#version 410\n";
-            sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_GREGORY_SHADER");
-            sconfig->fragmentShader.source = gregoryShaderSource;
-            sconfig->fragmentShader.version = "#version 410\n";
-            sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
-            break;
-        case FarPatchTables::GREGORY_BOUNDARY:
-            sconfig->vertexShader.source = boundaryGregoryShaderSource;
-            sconfig->vertexShader.version = "#version 410\n";
-            sconfig->vertexShader.AddDefine("PATCH_VERTEX_BOUNDARY_GREGORY_SHADER");
-            sconfig->tessControlShader.source = boundaryGregoryShaderSource;
-            sconfig->tessControlShader.version = "#version 410\n";
-            sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_BOUNDARY_GREGORY_SHADER");
-            sconfig->tessEvalShader.source = boundaryGregoryShaderSource;
-            sconfig->tessEvalShader.version = "#version 410\n";
-            sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_BOUNDARY_GREGORY_SHADER");
-            sconfig->fragmentShader.source = boundaryGregoryShaderSource;
-            sconfig->fragmentShader.version = "#version 410\n";
-            sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
-            break;
-        default:
-            // error
-            delete sconfig;
-            sconfig = NULL;
-            break;
+        sconfig->commonShader.source = commonShaderSource;
+        {
+            std::ostringstream ss;
+            ss << (int)desc.GetMaxValence();
+            sconfig->commonShader.AddDefine("OSD_MAX_VALENCE", ss.str());
+            ss.str("");
+            ss << (int)desc.GetNumElements();
+            sconfig->commonShader.AddDefine("OSD_NUM_ELEMENTS", ss.str());
         }
-    } else { // pattern != NON_TRANSITION
-        sconfig->vertexShader.source = transitionShaderSource;
-        sconfig->vertexShader.version = "#version 410\n";
-        sconfig->vertexShader.AddDefine("PATCH_VERTEX_SHADER");
-        sconfig->tessControlShader.source = transitionShaderSource;;
-        sconfig->tessControlShader.version = "#version 410\n";
-        sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_TRANSITION_SHADER");
-        sconfig->tessEvalShader.source = transitionShaderSource;
-        sconfig->tessEvalShader.version = "#version 410\n";
-        sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_TRANSITION_SHADER");
-        sconfig->fragmentShader.source = transitionShaderSource;
-        sconfig->fragmentShader.version = "#version 410\n";
-        sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
 
-        int pattern = desc.GetPattern() - 1;
-        int rotation = desc.GetRotation();
-        int subpatch = desc.GetSubPatch();
+        if (desc.GetPattern() == FarPatchTables::NON_TRANSITION) {
+            switch (desc.GetType()) {
+            case FarPatchTables::QUADS:
+            case FarPatchTables::TRIANGLES:
+                sconfig->vertexShader.source = regularShaderSource;
+                sconfig->vertexShader.version = "#version 410\n";
+                sconfig->vertexShader.AddDefine("VERTEX_SHADER");
+                sconfig->fragmentShader.source = regularShaderSource;
+                sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
+                sconfig->fragmentShader.version = "#version 410\n";
+                break;
+            case FarPatchTables::REGULAR:
+                sconfig->vertexShader.source = regularShaderSource;
+                sconfig->vertexShader.version = "#version 410\n";
+                sconfig->vertexShader.AddDefine("PATCH_VERTEX_SHADER");
+                sconfig->tessControlShader.source = regularShaderSource;
+                sconfig->tessControlShader.version = "#version 410\n";
+                sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_REGULAR_SHADER");
+                sconfig->tessEvalShader.source = regularShaderSource;
+                sconfig->tessEvalShader.version = "#version 410\n";
+                sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_REGULAR_SHADER");
+                sconfig->fragmentShader.source = regularShaderSource;
+                sconfig->fragmentShader.version = "#version 410\n";
+                sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
+                break;
+            case FarPatchTables::BOUNDARY:
+                sconfig->vertexShader.source = boundaryShaderSource;
+                sconfig->vertexShader.version = "#version 410\n";
+                sconfig->vertexShader.AddDefine("PATCH_VERTEX_SHADER");
+                sconfig->tessControlShader.source = boundaryShaderSource;
+                sconfig->tessControlShader.version = "#version 410\n";
+                sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_BOUNDARY_SHADER");
+                sconfig->tessEvalShader.source = boundaryShaderSource;
+                sconfig->tessEvalShader.version = "#version 410\n";
+                sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_BOUNDARY_SHADER");
+                sconfig->fragmentShader.source = boundaryShaderSource;
+                sconfig->fragmentShader.version = "#version 410\n";
+                sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
+                break;
+            case FarPatchTables::CORNER:
+                sconfig->vertexShader.source = cornerShaderSource;
+                sconfig->vertexShader.version = "#version 410\n";
+                sconfig->vertexShader.AddDefine("PATCH_VERTEX_SHADER");
+                sconfig->tessControlShader.source = cornerShaderSource;
+                sconfig->tessControlShader.version = "#version 410\n";
+                sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_CORNER_SHADER");
+                sconfig->tessEvalShader.source = cornerShaderSource;
+                sconfig->tessEvalShader.version = "#version 410\n";
+                sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_CORNER_SHADER");
+                sconfig->fragmentShader.source = cornerShaderSource;
+                sconfig->fragmentShader.version = "#version 410\n";
+                sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
+                break;
+            case FarPatchTables::GREGORY:
+                sconfig->vertexShader.source = gregoryShaderSource;
+                sconfig->vertexShader.version = "#version 410\n";
+                sconfig->vertexShader.AddDefine("PATCH_VERTEX_GREGORY_SHADER");
+                sconfig->tessControlShader.source = gregoryShaderSource;
+                sconfig->tessControlShader.version = "#version 410\n";
+                sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_GREGORY_SHADER");
+                sconfig->tessEvalShader.source = gregoryShaderSource;
+                sconfig->tessEvalShader.version = "#version 410\n";
+                sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_GREGORY_SHADER");
+                sconfig->fragmentShader.source = gregoryShaderSource;
+                sconfig->fragmentShader.version = "#version 410\n";
+                sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
+                break;
+            case FarPatchTables::GREGORY_BOUNDARY:
+                sconfig->vertexShader.source = boundaryGregoryShaderSource;
+                sconfig->vertexShader.version = "#version 410\n";
+                sconfig->vertexShader.AddDefine("PATCH_VERTEX_BOUNDARY_GREGORY_SHADER");
+                sconfig->tessControlShader.source = boundaryGregoryShaderSource;
+                sconfig->tessControlShader.version = "#version 410\n";
+                sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_BOUNDARY_GREGORY_SHADER");
+                sconfig->tessEvalShader.source = boundaryGregoryShaderSource;
+                sconfig->tessEvalShader.version = "#version 410\n";
+                sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_BOUNDARY_GREGORY_SHADER");
+                sconfig->fragmentShader.source = boundaryGregoryShaderSource;
+                sconfig->fragmentShader.version = "#version 410\n";
+                sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
+                break;
+            default:
+                // error
+                delete sconfig;
+                sconfig = NULL;
+                break;
+            }
+        } else { // pattern != NON_TRANSITION
+            sconfig->vertexShader.source = transitionShaderSource;
+            sconfig->vertexShader.version = "#version 410\n";
+            sconfig->vertexShader.AddDefine("PATCH_VERTEX_SHADER");
+            sconfig->tessControlShader.source = transitionShaderSource;;
+            sconfig->tessControlShader.version = "#version 410\n";
+            sconfig->tessControlShader.AddDefine("PATCH_TESS_CONTROL_TRANSITION_SHADER");
+            sconfig->tessEvalShader.source = transitionShaderSource;
+            sconfig->tessEvalShader.version = "#version 410\n";
+            sconfig->tessEvalShader.AddDefine("PATCH_TESS_EVAL_TRANSITION_SHADER");
+            sconfig->fragmentShader.source = transitionShaderSource;
+            sconfig->fragmentShader.version = "#version 410\n";
+            sconfig->fragmentShader.AddDefine("FRAGMENT_SHADER");
 
-        std::ostringstream ss;
-        ss << "CASE" << pattern << subpatch;
-        sconfig->tessControlShader.AddDefine(ss.str());
-        sconfig->tessEvalShader.AddDefine(ss.str());
+            int pattern = desc.GetPattern() - 1;
+            int rotation = desc.GetRotation();
+            int subpatch = desc.GetSubPatch();
 
-        ss.str("");
-        ss << rotation;
-        sconfig->tessControlShader.AddDefine("ROTATE", ss.str());
-        sconfig->tessEvalShader.AddDefine("ROTATE", ss.str());
+            std::ostringstream ss;
+            ss << "CASE" << pattern << subpatch;
+            sconfig->tessControlShader.AddDefine(ss.str());
+            sconfig->tessEvalShader.AddDefine(ss.str());
 
-        if (desc.GetType() == FarPatchTables::BOUNDARY) {
-            sconfig->tessControlShader.AddDefine("BOUNDARY");
-        } else if (desc.GetType() == FarPatchTables::CORNER) {
-            sconfig->tessControlShader.AddDefine("CORNER");
+            ss.str("");
+            ss << rotation;
+            sconfig->tessControlShader.AddDefine("ROTATE", ss.str());
+            sconfig->tessEvalShader.AddDefine("ROTATE", ss.str());
+
+            if (desc.GetType() == FarPatchTables::BOUNDARY) {
+                sconfig->tessControlShader.AddDefine("BOUNDARY");
+            } else if (desc.GetType() == FarPatchTables::CORNER) {
+                sconfig->tessControlShader.AddDefine("CORNER");
+            }
         }
     }
 #endif
@@ -310,24 +313,30 @@ OsdGLDrawRegistryBase::_CreateDrawConfig(
     GLuint tessEvalShader = 0;
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    tessControlShader =
-        sconfig->tessControlShader.source.empty() ? 0 :
-        _CompileShader(GL_TESS_CONTROL_SHADER,
-                sconfig->commonShader, sconfig->tessControlShader);
+    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    {
+        tessControlShader =
+            sconfig->tessControlShader.source.empty() ? 0 :
+            _CompileShader(GL_TESS_CONTROL_SHADER,
+                    sconfig->commonShader, sconfig->tessControlShader);
 
-    tessEvalShader =
-        sconfig->tessEvalShader.source.empty() ? 0 :
-        _CompileShader(GL_TESS_EVALUATION_SHADER,
-                sconfig->commonShader, sconfig->tessEvalShader);
+        tessEvalShader =
+            sconfig->tessEvalShader.source.empty() ? 0 :
+            _CompileShader(GL_TESS_EVALUATION_SHADER,
+                    sconfig->commonShader, sconfig->tessEvalShader);
+    }
 #endif
 
     GLuint geometryShader = 0;
 
 #if defined(GL_ARB_geometry_shader4) || defined(GL_VERSION_3_1)
-    geometryShader =
-        sconfig->geometryShader.source.empty() ? 0 :
-        _CompileShader(GL_GEOMETRY_SHADER,
-                sconfig->commonShader, sconfig->geometryShader);
+    if (GLEW_ARB_geometry_shader4 || GLEW_VERSION_3_1)
+    {
+        geometryShader =
+            sconfig->geometryShader.source.empty() ? 0 :
+            _CompileShader(GL_GEOMETRY_SHADER,
+                    sconfig->commonShader, sconfig->geometryShader);
+    }
 #endif
 
     GLuint fragmentShader =
