@@ -652,16 +652,20 @@ static GLuint compileShader(GLenum shaderType,
 }
 
 int bindPTexture(GLint program, OpenSubdiv::OsdGLPtexTexture *osdPTex,
-                 GLuint data, GLuint packing, GLuint pages, int samplerUnit)
+                 GLuint data, GLuint packing, GLuint pages,
+		 GLuint mipmaps,
+		 int samplerUnit)
 {
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
     glProgramUniform1i(program, data, samplerUnit + 0);
     glProgramUniform1i(program, packing, samplerUnit + 1);
     glProgramUniform1i(program, pages, samplerUnit + 2);
+    glProgramUniform1i(program, mipmaps, osdPTex->GetMipmaps());
 #else
     glUniform1i(data, samplerUnit + 0);
     glUniform1i(packing, samplerUnit + 1);
     glUniform1i(pages, samplerUnit + 2);
+    glUniform1i(mipmaps, osdPTex->GetMipmaps());
 #endif
 
     glActiveTexture(GL_TEXTURE0 + samplerUnit + 0);
@@ -1319,14 +1323,16 @@ bindProgram(Effect effect, OpenSubdiv::OsdDrawContext::PatchArray const & patch)
     GLint texData = glGetUniformLocation(program, "textureImage_Data");
     GLint texPacking = glGetUniformLocation(program, "textureImage_Packing");
     GLint texPages = glGetUniformLocation(program, "textureImage_Pages");
-    sampler = bindPTexture(program, g_osdPTexImage, texData, texPacking, texPages, sampler);
+    GLint texMipmaps = glGetUniformLocation(program, "textureImage_Mipmaps");
+    sampler = bindPTexture(program, g_osdPTexImage, texData, texPacking, texPages, texMipmaps, sampler);
 
     // displacement ptex
     if (g_displacement || g_normal) {
         texData = glGetUniformLocation(program, "textureDisplace_Data");
         texPacking = glGetUniformLocation(program, "textureDisplace_Packing");
         texPages = glGetUniformLocation(program, "textureDisplace_Pages");
-        sampler = bindPTexture(program, g_osdPTexDisplacement, texData, texPacking, texPages, sampler);
+        texMipmaps = glGetUniformLocation(program, "textureDisplace_Mipmaps");
+        sampler = bindPTexture(program, g_osdPTexDisplacement, texData, texPacking, texPages, texMipmaps, sampler);
     }
 
     // occlusion ptex
@@ -1334,7 +1340,8 @@ bindProgram(Effect effect, OpenSubdiv::OsdDrawContext::PatchArray const & patch)
         texData = glGetUniformLocation(program, "textureOcclusion_Data");
         texPacking = glGetUniformLocation(program, "textureOcclusion_Packing");
         texPages = glGetUniformLocation(program, "textureOcclusion_Pages");
-        sampler = bindPTexture(program, g_osdPTexOcclusion, texData, texPacking, texPages, sampler);
+        texMipmaps = glGetUniformLocation(program, "textureOcclusion_Mipmaps");
+        sampler = bindPTexture(program, g_osdPTexOcclusion, texData, texPacking, texPages, texMipmaps, sampler);
     }
 
     // specular ptex
@@ -1342,7 +1349,8 @@ bindProgram(Effect effect, OpenSubdiv::OsdDrawContext::PatchArray const & patch)
         texData = glGetUniformLocation(program, "textureSpecular_Data");
         texPacking = glGetUniformLocation(program, "textureSpecular_Packing");
         texPages = glGetUniformLocation(program, "textureSpecular_Pages");
-        sampler = bindPTexture(program, g_osdPTexSpecular, texData, texPacking, texPages, sampler);
+        texMipmaps = glGetUniformLocation(program, "textureSpecular_Mipmaps");
+        sampler = bindPTexture(program, g_osdPTexSpecular, texData, texPacking, texPages, texMipmaps, sampler);
     }
 
     // other textures
