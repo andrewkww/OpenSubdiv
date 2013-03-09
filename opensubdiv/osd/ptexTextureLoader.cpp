@@ -86,6 +86,8 @@ struct OsdPtexTextureLoader::block {
 
     int idx;                    // PTex face index
 
+    int level;                  // mipmap level
+
     unsigned short u, v;        // location in memory pages
 
     Ptex::Res current,          // current resolution of the block
@@ -250,7 +252,7 @@ struct OsdPtexTextureLoader::page {
 };
 
 OsdPtexTextureLoader::OsdPtexTextureLoader( PtexTexture * p,
-                                      int gutterWidth, int pageMargin) :
+                                      int gutterWidth, int pageMargin, int maxMipmaps ) :
     _ptex(p), _indexBuffer( NULL ), _layoutBuffer( NULL ), _texelBuffer(NULL),
     _gutterWidth(gutterWidth), _pageMargin(pageMargin)
 {
@@ -258,15 +260,35 @@ OsdPtexTextureLoader::OsdPtexTextureLoader( PtexTexture * p,
 
     _txn = 0;
 
-    int nf = p->numFaces();
+    _numFaces = p->numFaces();
     _blocks.clear();
-    _blocks.resize( nf );
 
-    for (int i=0; i<nf; ++i) {
+    //TODO: guess and reserve the number of blocks needed
+    //_blocks.resize( nf );
+
+    _mipmaps = 0;
+    for (unsigned int i=0; i<_numFaces; ++i) {
         const Ptex::FaceInfo & f = p->getFaceInfo(i);
-        _blocks[i].idx=i;
-        _blocks[i].current=_blocks[i].native=f.res;
-        _txn += f.res.u() * f.res.v();
+        Ptex::Res res = f.res;
+
+        int level;
+        if (res.ulog2 < res.vlog2)
+           level = res.ulog2;
+        else
+           level = res.vlog2;
+        if (maxMipmaps > 0 && maxMipmaps < level)
+            level = maxMipmaps;
+        for (int j=0; j<level; ++j, --res.ulog2, --res.vlog2) {
+            block b;
+            b.idx=i;
+            b.level=j;
+            b.current=b.native=res;
+            _blocks.push_back(b);
+            _txn += res.u() * res.v();
+        }
+        if(level > _mipmaps) {
+            _mipmaps = level;
+        }
     }
 
     _txc = _txn;
@@ -851,21 +873,47 @@ OsdPtexTextureLoader::GenerateBuffers( )
     if (_pages.size()==0) return false;
 
     // populate the page index lookup texture ------------------------
-    _indexBuffer = new unsigned int[ _blocks.size() ];
+    _indexBuffer = new unsigned int[ _numFaces*_mipmaps ];
+    //fill with invalid index
+    for (unsigned long int i=0; i<_numFaces*_mipmaps; ++i) {
+        _indexBuffer[i] = (unsigned int)_pages.size();
+    }
     for (unsigned long int i=0; i<_pages.size(); ++i) {
         page * p = _pages[i];
         for (page::blist::iterator j=p->blocks.begin(); j!=p->blocks.end(); ++j)
-            _indexBuffer[ (*j)->idx ] = i;
+            _indexBuffer[ ((*j)->idx)*_mipmaps+(*j)->level ] = i;
+    }
+    //set any invalid index to the last index
+    for (unsigned long int i=0; i<_numFaces*_mipmaps; ++i) {
+        if (_indexBuffer[i] == _pages.size()) {
+            _indexBuffer[i] = _indexBuffer[i-1];
+        }
     }
 
     // populate the layout lookup texture ----------------------------
-    float * lptr = _layoutBuffer = new float[ 4 * _blocks.size() ];
-    for (unsigned long int i=0; i<_blocks.size(); ++ i) {
-        // normalize coordinates by pagesize resolution !
-        *lptr++ = (float) _blocks[i].u / (float) _pagesize;
-        *lptr++ = (float) _blocks[i].v / (float) _pagesize;
-        *lptr++ = (float) _blocks[i].current.u() / (float) _pagesize;
-        *lptr++ = (float) _blocks[i].current.v() / (float) _pagesize;
+    {
+        float * lptr = _layoutBuffer = new float[ 4 * _numFaces*_mipmaps ];
+        int j = 0;
+        for (unsigned long int i=0; i<_blocks.size(); ++ i) {
+            // normalize coordinates by pagesize resolution !
+            *lptr++ = (float) _blocks[i].u / (float) _pagesize;
+            *lptr++ = (float) _blocks[i].v / (float) _pagesize;
+            *lptr++ = (float) _blocks[i].current.u() / (float) _pagesize;
+            *lptr++ = (float) _blocks[i].current.v() / (float) _pagesize;
+            // if next block is a difference face
+            if (i+1==_blocks.size() || _blocks[i].idx != _blocks[i+1].idx) {
+                // make sure we fill all the mipmap for this face
+                for (; j+1<_mipmaps; ++j) {
+                    *lptr++ = *(lptr-4);
+                    *lptr++ = *(lptr-4);
+                    *lptr++ = *(lptr-4);
+                    *lptr++ = *(lptr-4);
+                }
+                j=0;
+            } else {
+                ++j;
+            }
+        }
     }
 
     // populate the texels -------------------------------------------
@@ -933,6 +981,7 @@ OsdPtexTextureLoader::PrintPages() const
 
 std::ostream & operator <<(std::ostream &s, const OsdPtexTextureLoader::block & b)
 { s<<"block "<<b.idx<<" = { ";
+  s<<"level="<<b.level;
   s<<"native=("<<b.native.u()<<","<<b.native.v()<<") ";
   s<<"current=("<<b.current.u()<<","<<b.current.v()<<") ";
   s<<"}";

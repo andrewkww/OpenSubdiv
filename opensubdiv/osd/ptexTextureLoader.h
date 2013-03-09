@@ -119,7 +119,7 @@ public:
     struct block;
     struct page;
 
-    OsdPtexTextureLoader( PtexTexture *ptex, int gutterWidth, int pageMargin );
+    OsdPtexTextureLoader( PtexTexture *ptex, int gutterWidth, int pageMargin, int maxMipmap=1 );
 
     ~OsdPtexTextureLoader();
 
@@ -154,6 +154,10 @@ public:
     int GetGutterWidth() const { return _gutterWidth; }
     
     int GetPageMargin() const { return _pageMargin; }
+
+    int GetNumFaces() const { return _numFaces; }
+
+    int GetMipmaps() const { return _mipmaps; }
 
     void OptimizeResolution( unsigned long int memrec );
 
@@ -194,6 +198,8 @@ private:
     unsigned char * _texelBuffer;
 
     int _gutterWidth, _pageMargin;
+    unsigned int _numFaces;
+    int _mipmaps;
 };
 
 } // end namespace OPENSUBDIV_VERSION
