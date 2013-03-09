@@ -154,12 +154,13 @@ OpenSubdiv::OsdGLMeshInterface *g_mesh;
 #include <sstream>
 #include <fstream>
 
-static const char *g_defaultShaderSource =
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
+static const char *g_defaultShaderSource =
     #include "shader.inc"
-#else
-    #include "shader_gl3.inc"
+;
 #endif
+static const char *g_defaultShaderSource_gl3 =
+    #include "shader_gl3.inc"
 ;
 static const char *g_skyShaderSource =
 #include "skyshader.inc"
@@ -726,11 +727,17 @@ EffectDrawRegistry::_CreateDrawSourceConfig(DescType const & desc)
     if (effect.screenSpaceTess)
         sconfig->commonShader.AddDefine("OSD_ENABLE_SCREENSPACE_TESSELLATION");
 
+    const char *glslVersion;
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    const char *glslVersion = "#version 400\n";
-#else
-    const char *glslVersion = "#version 330\n";
+    if(GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    {
+        glslVersion = "#version 400\n";
+    }
+    else
 #endif
+    {
+        glslVersion = "#version 330\n";
+    }
 
     bool quad = true;
     if (desc.first.GetType() == OpenSubdiv::FarPatchTables::QUADS) {
@@ -808,9 +815,12 @@ EffectDrawRegistry::_CreateDrawConfig(
     g_tessellationBinding = 1;
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    glUniformBlockBinding(config->program,
-        glGetUniformBlockIndex(config->program, "Tessellation"),
-        g_tessellationBinding);
+    if(GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    {
+        glUniformBlockBinding(config->program,
+            glGetUniformBlockIndex(config->program, "Tessellation"),
+            g_tessellationBinding);
+    }
 #endif
 
     g_lightingBinding = 2;
@@ -820,33 +830,38 @@ EffectDrawRegistry::_CreateDrawConfig(
 
     GLint loc;
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-    if ((loc = glGetUniformLocation(config->program, "g_VertexBuffer")) != -1) {
-        glProgramUniform1i(config->program, loc, 0); // GL_TEXTURE0
+    if(GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+    {
+        if ((loc = glGetUniformLocation(config->program, "g_VertexBuffer")) != -1) {
+            glProgramUniform1i(config->program, loc, 0); // GL_TEXTURE0
+        }
+        if ((loc = glGetUniformLocation(config->program, "g_ValenceBuffer")) != -1) {
+            glProgramUniform1i(config->program, loc, 1); // GL_TEXTURE1
+        }
+        if ((loc = glGetUniformLocation(config->program, "g_QuadOffsetBuffer")) != -1) {
+            glProgramUniform1i(config->program, loc, 2); // GL_TEXTURE2
+        }
+        if ((loc = glGetUniformLocation(config->program, "g_ptexIndicesBuffer")) != -1) {
+            glProgramUniform1i(config->program, loc, 3); // GL_TEXTURE3
+        }
     }
-    if ((loc = glGetUniformLocation(config->program, "g_ValenceBuffer")) != -1) {
-        glProgramUniform1i(config->program, loc, 1); // GL_TEXTURE1
-    }
-    if ((loc = glGetUniformLocation(config->program, "g_QuadOffsetBuffer")) != -1) {
-        glProgramUniform1i(config->program, loc, 2); // GL_TEXTURE2
-    }
-    if ((loc = glGetUniformLocation(config->program, "g_ptexIndicesBuffer")) != -1) {
-        glProgramUniform1i(config->program, loc, 3); // GL_TEXTURE3
-    }
-#else
-    glUseProgram(config->program);
-    if ((loc = glGetUniformLocation(config->program, "g_VertexBuffer")) != -1) {
-        glUniform1i(loc, 0); // GL_TEXTURE0
-    }
-    if ((loc = glGetUniformLocation(config->program, "g_ValenceBuffer")) != -1) {
-        glUniform1i(loc, 1); // GL_TEXTURE1
-    }
-    if ((loc = glGetUniformLocation(config->program, "g_QuadOffsetBuffer")) != -1) {
-        glUniform1i(loc, 2); // GL_TEXTURE2
-    }
-    if ((loc = glGetUniformLocation(config->program, "g_ptexIndicesBuffer")) != -1) {
-        glUniform1i(loc, 4); // GL_TEXTURE3
-    }
+    else
 #endif
+    {
+        glUseProgram(config->program);
+        if ((loc = glGetUniformLocation(config->program, "g_VertexBuffer")) != -1) {
+            glUniform1i(loc, 0); // GL_TEXTURE0
+        }
+        if ((loc = glGetUniformLocation(config->program, "g_ValenceBuffer")) != -1) {
+            glUniform1i(loc, 1); // GL_TEXTURE1
+        }
+        if ((loc = glGetUniformLocation(config->program, "g_QuadOffsetBuffer")) != -1) {
+            glUniform1i(loc, 2); // GL_TEXTURE2
+        }
+        if ((loc = glGetUniformLocation(config->program, "g_ptexIndicesBuffer")) != -1) {
+            glUniform1i(loc, 4); // GL_TEXTURE3
+        }
+    }
 
     return config;
 }
@@ -1071,17 +1086,22 @@ createSky() {
 
     GLint environmentMap = glGetUniformLocation(g_sky.program, "environmentMap");
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-    if (g_specularEnvironmentMap)
-        glProgramUniform1i(g_sky.program, environmentMap, 6);
+    if(GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+    {
+        if (g_specularEnvironmentMap)
+            glProgramUniform1i(g_sky.program, environmentMap, 6);
+        else
+            glProgramUniform1i(g_sky.program, environmentMap, 5);
+    }
     else
-        glProgramUniform1i(g_sky.program, environmentMap, 5);
-#else
-    glUseProgram(g_sky.program);
-    if (g_specularEnvironmentMap)
-      glUniform1i(environmentMap, 6);
-    else
-      glUniform1i(environmentMap, 5);
 #endif
+    {
+        glUseProgram(g_sky.program);
+        if (g_specularEnvironmentMap)
+          glUniform1i(environmentMap, 6);
+        else
+          glUniform1i(environmentMap, 5);
+    }
 
     g_sky.mvpMatrix = glGetUniformLocation(g_sky.program, "ModelViewProjectionMatrix");
 }
@@ -1349,20 +1369,30 @@ bindProgram(Effect effect, OpenSubdiv::OsdDrawContext::PatchArray const & patch)
     if (g_ibl) {
         if (g_diffuseEnvironmentMap) {
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-            glProgramUniform1i(program, glGetUniformLocation(program, "diffuseEnvironmentMap"), 5);
-#else
-            glUniform1i(glGetUniformLocation(program, "diffuseEnvironmentMap"), 5);
+            if(GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+            {
+                glProgramUniform1i(program, glGetUniformLocation(program, "diffuseEnvironmentMap"), 5);
+            }
+            else
 #endif
+            {
+                glUniform1i(glGetUniformLocation(program, "diffuseEnvironmentMap"), 5);
+            }
             glActiveTexture(GL_TEXTURE5);
             glBindTexture(GL_TEXTURE_2D, g_diffuseEnvironmentMap);
             sampler++;
         }
         if (g_specularEnvironmentMap) {
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-            glProgramUniform1i(program, glGetUniformLocation(program, "specularEnvironmentMap"), 6);
-#else
-            glUniform1i(glGetUniformLocation(program, "specularEnvironmentMap"), 6);
+            if (GLEW_ARB_separate_shader_objects || GL_VERSION_4_1)
+            {
+                glProgramUniform1i(program, glGetUniformLocation(program, "specularEnvironmentMap"), 6);
+            }
+            else
 #endif
+            {
+                glUniform1i(glGetUniformLocation(program, "specularEnvironmentMap"), 6);
+            }
             glActiveTexture(GL_TEXTURE6);
             glBindTexture(GL_TEXTURE_2D, g_specularEnvironmentMap);
             sampler++;
@@ -1377,10 +1407,16 @@ bindProgram(Effect effect, OpenSubdiv::OsdDrawContext::PatchArray const & patch)
 void
 drawModel() {
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    GLuint bVertex = g_mesh->BindVertexBuffer();
-#else
-    g_mesh->BindVertexBuffer();
+    GLuint bVertex;
+    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    {
+        bVertex = g_mesh->BindVertexBuffer();
+    }
+    else
 #endif
+    {
+    g_mesh->BindVertexBuffer();
+    }
 
     OpenSubdiv::OsdDrawContext::PatchArrayVector const & patches = g_mesh->GetDrawContext()->patchArrays;
     glBindVertexArray(g_vao);
@@ -1402,11 +1438,16 @@ drawModel() {
             break;
         default:
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-            primType = GL_PATCHES;
-            glPatchParameteri(GL_PATCH_VERTICES, desc.GetNumControlVertices());
-#else
-            primType = GL_POINTS;
+            if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+            {
+                primType = GL_PATCHES;
+                glPatchParameteri(GL_PATCH_VERTICES, desc.GetNumControlVertices());
+            }
+            else
 #endif
+            {
+                primType = GL_POINTS;
+            }
         }
 
         if (g_mesh->GetDrawContext()->vertexTextureBuffer) {
@@ -1451,10 +1492,15 @@ drawModel() {
         GLint nonAdaptiveLevel = glGetUniformLocation(program, "nonAdaptiveLevel");
         if (nonAdaptiveLevel != -1) {
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-            glProgramUniform1i(program, nonAdaptiveLevel, g_level);
-#else
-            glUniform1i(nonAdaptiveLevel, g_level);
+            if (GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+            {
+                glProgramUniform1i(program, nonAdaptiveLevel, g_level);
+            }
+            else
 #endif
+            {
+                glUniform1i(nonAdaptiveLevel, g_level);
+            }
         }
 
         GLint displacementScale = glGetUniformLocation(program, "displacementScale");
@@ -1465,17 +1511,20 @@ drawModel() {
             glUniform1f(bumpScale, g_bumpScale);
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-        GLuint overrideColorEnable = glGetUniformLocation(program, "overrideColorEnable");
-        GLuint overrideColor = glGetUniformLocation(program, "overrideColor");
+    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    {
+            GLuint overrideColorEnable = glGetUniformLocation(program, "overrideColorEnable");
+            GLuint overrideColor = glGetUniformLocation(program, "overrideColor");
 
-        float const * color = getAdaptivePatchColor( desc );
-        glProgramUniform4f(program, overrideColor, color[0], color[1], color[2], color[3]);
+            float const * color = getAdaptivePatchColor( desc );
+            glProgramUniform4f(program, overrideColor, color[0], color[1], color[2], color[3]);
 
-        if (g_displayPatchColor or g_wire == 2) {
-            glProgramUniform1i(program, overrideColorEnable, 1);
-        } else {
-            glProgramUniform1i(program, overrideColorEnable, 0);
-        }
+            if (g_displayPatchColor or g_wire == 2) {
+                glProgramUniform1i(program, overrideColorEnable, 1);
+            } else {
+                glProgramUniform1i(program, overrideColorEnable, 0);
+            }
+    }
 #endif
 
         if (g_wire == 0) {
@@ -2011,7 +2060,12 @@ int main(int argc, char ** argv) {
 
     OsdSetErrorCallback(callbackError);
 
-    g_shaderSource = g_defaultShaderSource;
+    if (GLEW_ARB_tessellation_shader || GL_VERSION_4_0)
+    {
+        g_shaderSource = g_defaultShaderSource;
+    } else {
+        g_shaderSource = g_defaultShaderSource_gl3;
+    }
     reloadShaderFile();
 
     g_ptexColorFilename = colorFilename;
