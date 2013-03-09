@@ -729,7 +729,7 @@ EffectDrawRegistry::_CreateDrawSourceConfig(DescType const & desc)
 
     const char *glslVersion;
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    if(GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    if(GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
     {
         glslVersion = "#version 400\n";
     }
@@ -815,7 +815,7 @@ EffectDrawRegistry::_CreateDrawConfig(
     g_tessellationBinding = 1;
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    if(GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    if(GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
     {
         glUniformBlockBinding(config->program,
             glGetUniformBlockIndex(config->program, "Tessellation"),
@@ -830,7 +830,7 @@ EffectDrawRegistry::_CreateDrawConfig(
 
     GLint loc;
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-    if(GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+    if(GLEW_ARB_separate_shader_objects && GLEW_VERSION_4_1)
     {
         if ((loc = glGetUniformLocation(config->program, "g_VertexBuffer")) != -1) {
             glProgramUniform1i(config->program, loc, 0); // GL_TEXTURE0
@@ -1086,7 +1086,7 @@ createSky() {
 
     GLint environmentMap = glGetUniformLocation(g_sky.program, "environmentMap");
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-    if(GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+    if(GLEW_ARB_separate_shader_objects && GLEW_VERSION_4_1)
     {
         if (g_specularEnvironmentMap)
             glProgramUniform1i(g_sky.program, environmentMap, 6);
@@ -1369,7 +1369,7 @@ bindProgram(Effect effect, OpenSubdiv::OsdDrawContext::PatchArray const & patch)
     if (g_ibl) {
         if (g_diffuseEnvironmentMap) {
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-            if(GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+            if(GLEW_ARB_separate_shader_objects && GLEW_VERSION_4_1)
             {
                 glProgramUniform1i(program, glGetUniformLocation(program, "diffuseEnvironmentMap"), 5);
             }
@@ -1384,7 +1384,7 @@ bindProgram(Effect effect, OpenSubdiv::OsdDrawContext::PatchArray const & patch)
         }
         if (g_specularEnvironmentMap) {
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-            if (GLEW_ARB_separate_shader_objects || GL_VERSION_4_1)
+            if (GLEW_ARB_separate_shader_objects && GL_VERSION_4_1)
             {
                 glProgramUniform1i(program, glGetUniformLocation(program, "specularEnvironmentMap"), 6);
             }
@@ -1408,7 +1408,7 @@ void
 drawModel() {
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
     GLuint bVertex;
-    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    if (GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
     {
         bVertex = g_mesh->BindVertexBuffer();
     }
@@ -1438,7 +1438,7 @@ drawModel() {
             break;
         default:
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-            if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+            if (GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
             {
                 primType = GL_PATCHES;
                 glPatchParameteri(GL_PATCH_VERTICES, desc.GetNumControlVertices());
@@ -1492,7 +1492,7 @@ drawModel() {
         GLint nonAdaptiveLevel = glGetUniformLocation(program, "nonAdaptiveLevel");
         if (nonAdaptiveLevel != -1) {
 #if defined(GL_ARB_separate_shader_objects) || defined(GL_VERSION_4_1)
-            if (GLEW_ARB_separate_shader_objects || GLEW_VERSION_4_1)
+            if (GLEW_ARB_separate_shader_objects && GLEW_VERSION_4_1)
             {
                 glProgramUniform1i(program, nonAdaptiveLevel, g_level);
             }
@@ -1511,7 +1511,7 @@ drawModel() {
             glUniform1f(bumpScale, g_bumpScale);
 
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
-    if (GLEW_ARB_tessellation_shader || GLEW_VERSION_4_0)
+    if (GLEW_ARB_tessellation_shader && GLEW_VERSION_4_0)
     {
             GLuint overrideColorEnable = glGetUniformLocation(program, "overrideColorEnable");
             GLuint overrideColor = glGetUniformLocation(program, "overrideColor");
@@ -2060,7 +2060,7 @@ int main(int argc, char ** argv) {
 
     OsdSetErrorCallback(callbackError);
 
-    if (GLEW_ARB_tessellation_shader || GL_VERSION_4_0)
+    if (GLEW_ARB_tessellation_shader && GL_VERSION_4_0)
     {
         g_shaderSource = g_defaultShaderSource;
     } else {
