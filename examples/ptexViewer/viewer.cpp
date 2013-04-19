@@ -1764,7 +1764,7 @@ int main(int argc, char ** argv) {
     
     static const char windowTitle[] = "OpenSubdiv glViewer";
     
-#define CORE_PROFILE
+//#define CORE_PROFILE
 #ifdef CORE_PROFILE
     setGLCoreProfile();
 #endif
