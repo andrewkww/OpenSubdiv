@@ -65,6 +65,10 @@
     #include <GL/glew.h>
 #endif
 
+#undef GL_VERSION_4_0
+#undef GL_VERSION_4_1
+#undef GL_ARB_tessellation_shader
+
 #include "../osd/glDrawRegistry.h"
 #include "../osd/error.h"
 

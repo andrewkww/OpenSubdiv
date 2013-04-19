@@ -150,6 +150,10 @@ OpenSubdiv::OsdGLMeshInterface *g_mesh;
 #include "../common/simple_math.h"
 #include "../common/gl_hud.h"
 
+#undef GL_VERSION_4_0
+#undef GL_VERSION_4_1
+#undef GL_ARB_tessellation_shader
+
 static const char *shaderSource =
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
     #include "shader.inc"

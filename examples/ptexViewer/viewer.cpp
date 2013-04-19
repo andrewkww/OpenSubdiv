@@ -159,6 +159,10 @@ OpenSubdiv::OsdGLMeshInterface *g_mesh;
 #include <sstream>
 #include <fstream>
 
+#undef GL_VERSION_4_0
+#undef GL_VERSION_4_1
+#undef GL_ARB_tessellation_shader
+
 static const char *g_defaultShaderSource =
 #if defined(GL_ARB_tessellation_shader) || defined(GL_VERSION_4_0)
     #include "shader.inc"
